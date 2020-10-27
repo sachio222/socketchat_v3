@@ -8,6 +8,7 @@ from handlers import HandshakeHandler, InputHandler, ClientMsgHandler
 from lib.encryption import x509
 
 import config.filepaths as paths
+
 configs = utils.JSONLoader()
 prefixes = utils.JSONLoader(paths.prefix_path)
 

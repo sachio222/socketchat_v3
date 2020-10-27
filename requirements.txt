@@ -10,4 +10,4 @@ argon2==0.1.10
 Pillow==8.0.1
 pycryptodome==3.9.8
 secrets==1.0.2
-cryptography==3.0
+cryptography==3.2
