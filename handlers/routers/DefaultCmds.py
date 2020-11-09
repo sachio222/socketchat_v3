@@ -15,7 +15,7 @@ prefixes = utils.JSONLoader(paths.prefix_path)
 
 def about(*args, **kwargs):
     """Read from file in config folder."""
-    path = config.filepaths.about
+    path = paths.about
     utils.print_from_file(path)
 
 
@@ -80,7 +80,7 @@ def exit(sock: socket, *args, **kwargs):
 
 def help(*args, **kwargs):
     """Read from file in config folder."""
-    path = config.filepaths.help
+    path = paths.help
     utils.print_from_file(path)
 
 
