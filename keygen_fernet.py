@@ -1,5 +1,5 @@
-from encryption.fernet import Cipher
+from lib.encryption.fernet import FernetCipher
 
 if __name__ == "__main__":
-    cipher = Cipher()
+    cipher = FernetCipher()
     cipher.generate_key()

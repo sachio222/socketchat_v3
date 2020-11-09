@@ -1,12 +1,1 @@
-{
-    "jake": {
-        "nick": "jake",
-        "addr": [
-            "192.168.68.142",
-            36940
-        ],
-        "public_key": "i9okN0ToKD+jGQHcgolo9cpLZlbkW14SpzT4UTPSJWs=",
-        "verify_key": "6WcboNsoVOiPsHcgp4uzJ4BYeEe0RMHsBH0Wj0AmQh0=",
-        "trusted": null
-    }
-}
+{}

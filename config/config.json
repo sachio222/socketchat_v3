@@ -1,5 +1,5 @@
 {
-    "cipher": "aes256",
+    "cipher": "chacha",
     "introduced": false,
     "muted": true,
     "session": {
@@ -8,7 +8,8 @@
     "system": {
         "debug": false,
         "bufferLen": 4096,
-        "defaultHost": "192.168.68.142",
+        "defaultHost": "0.0.0.0",
+        "defaultHostB": "192.168.68.142",
         "defaultPort": 12222,
         "headerLen": 10,
         "idleTimeSec": 600,
