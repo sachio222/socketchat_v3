@@ -8,8 +8,8 @@
     "system": {
         "debug": false,
         "bufferLen": 4096,
-        "defaultHost": "69.142.161.132",
-        "defaultHostB": "192.168.68.142",
+        "defaultHost": "192.168.1.19",
+        "defaultHostB": "0.0.0.0",
         "defaultPort": 12222,
         "headerLen": 10,
         "idleTimeSec": 600,

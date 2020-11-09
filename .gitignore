@@ -27,3 +27,7 @@ downloads/
 
 #-- vs code meta
 /.vscode
+
+
+#-- cfg
+config/config.json

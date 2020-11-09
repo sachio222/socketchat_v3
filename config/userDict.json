@@ -1,1 +1,42 @@
-{}
+{
+    "Jake": {
+        "nick": "Jake",
+        "addr": [
+            "47.198.23.189",
+            63467
+        ],
+        "public_key": "FY2RijRZzvvigSSJ8zXCbiepyDQbvqWlHED4Io/AyA0=",
+        "verify_key": "crYQDI/F0lPbSGJBqopKC3XGAcHvQ5ghWmIfUSG06zQ=",
+        "trusted": null
+    },
+    "toofus": {
+        "nick": "toofus",
+        "addr": [
+            "69.142.161.132",
+            49708
+        ],
+        "public_key": "YCODosyp2Hx7ZT46u+XE51oeCBzKuyFtddPytutI8Fg=",
+        "verify_key": "nA6Lc6zRrIqLoNFoYW2oVSR6cT3amFOsYNCOWBlmrUY=",
+        "trusted": null
+    },
+    "jake": {
+        "nick": "jake",
+        "addr": [
+            "47.198.23.189",
+            63985
+        ],
+        "public_key": "hxFWj2uiFX8qUfZmuHR0+65J4lwfuFQ/C8/sBuOxcmk=",
+        "verify_key": "SYxua7pMWIUTzVtajJNaNsr5Z7/aP1OycU+GN13Z/0M=",
+        "trusted": null
+    },
+    "toofy": {
+        "nick": "toofy",
+        "addr": [
+            "69.142.161.132",
+            49740
+        ],
+        "public_key": "FFfADSrraXliFpqkkUXr6lSu0Ws9ecmH56p2QP7BVys=",
+        "verify_key": "mICVjCln+q3vXxv9QQ0+/2dQqVANDY/m8RNfNClvyKg=",
+        "trusted": null
+    }
+}
