@@ -1,14 +1,14 @@
 {
     "cipher": "chacha",
     "introduced": false,
-    "muted": true,
+    "muted": false,
     "session": {
         "isUniqueId": false
     },
     "system": {
         "debug": false,
         "bufferLen": 4096,
-        "defaultHost": "0.0.0.0",
+        "defaultHost": "69.142.161.132",
         "defaultHostB": "192.168.68.142",
         "defaultPort": 12222,
         "headerLen": 10,
