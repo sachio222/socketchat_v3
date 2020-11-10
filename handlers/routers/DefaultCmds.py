@@ -1,14 +1,12 @@
-from os import chown
-from chatutils.channel2 import Chime
-from chatutils import channel2
-import sys
-import socket
+import sys, socket
 
 from chatutils import utils, passtools
 from chatutils.chatio2 import ChatIO
+from chatutils.channel2 import Chime
 
 from lib.xfer.FileXfer import *
 from handlers import EncryptionHandler
+
 from handlers.routers import EncryptionCmds
 
 import config.filepaths as paths
@@ -108,7 +106,6 @@ def sendfile(sock: socket, *args, **kwargs):
         print(e)
     print("file sent")
     return
-
     # SenderOperations().show_prompts(sock)
 
 
