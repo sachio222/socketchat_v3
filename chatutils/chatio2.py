@@ -2,6 +2,7 @@ import json
 import socket
 from types import ModuleType
 from chatutils import utils
+from chatutils.channel2 import Chime
 import config.filepaths as paths
 
 configs = utils.JSONLoader()
@@ -163,5 +164,7 @@ class ChatIO:
                 self.pack_n_send(s, prefixes.dict["server"]["chat"][pfx_type],
                                  msg_bytes)
 
-    def print_to_client(self, sender: str, msg: str):
+
+    def print_to_client(self, sender: str, msg: str, muted:bool = False):
+        Chime.play_chime()
         print(f'@{sender}: {msg}')
