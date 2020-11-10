@@ -1,3 +1,6 @@
+from os import chown
+from chatutils.channel2 import Chime
+from chatutils import channel2
 import sys
 import socket
 
@@ -124,9 +127,8 @@ def status(*args, **kwargs):
 
 
 def mute(*args, **kwargs):
-    configs.dict["muted"] = True
-    configs.update()
-    ChatIO().print_message("@YO: Muted. Type /unmute to restore sound.")
+    print("@YO: Muted. Type /unmute to restore sound.")
+    Chime.mute_chime()
 
 
 def trust(sock: socket, *args, **kwargs):
@@ -138,9 +140,8 @@ def trust(sock: socket, *args, **kwargs):
 
 
 def unmute(*args, **kwargs):
-    configs.dict["muted"] = False
-    configs.update()
-    ChatIO().print_message("@YO: B00P! Type /mute to turn off sound.")
+    print("@YO: B00P! Type /mute to turn off sound.")
+    Chime.unmute_chime()
 
 
 dispatch = {
