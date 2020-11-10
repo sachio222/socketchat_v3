@@ -54,7 +54,6 @@ class Client(ChatIO):
             buffer = input("")
 
             print("\x1B[F\x1B[2K", end="")
-            Chime.play_chime()
             print(f"@{USER_ID}: " + buffer)
 
             output_bytes, msg_type = InputHandler.dispatch(sock, buffer)
