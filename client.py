@@ -1,9 +1,10 @@
 #!/usr/bin/ python3
 """Encryptochat 2.0"""
-from chatutils.channel2 import Chime
+from chatutils.argparser import ArgParser
 import socket, ssl
 from threading import Thread
 from chatutils import utils, channel2
+from chatutils.channel2 import Chime
 from chatutils.chatio2 import ChatIO
 from handlers import HandshakeHandler, InputHandler, ClientMsgHandler
 from lib.encryption import x509
@@ -127,3 +128,5 @@ if __name__ == "__main__":
     # ******** SSL CONTEXT ********#
 
     main()
+
+

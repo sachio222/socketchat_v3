@@ -16,20 +16,19 @@ prefixes = utils.JSONLoader(paths.prefix_path)
 
 BUFFER_LEN = configs.dict["system"]["bufferLen"]
 
-
 def _f_handler(sock: socket, *args, **kwargs):
-    """INCOMING FILE INFO"""
+    """Incoming file info."""
     pass
 
 
 def _i_handler(sock: socket, *args, **kwargs):
-    """IDLE PING LISTENER"""
+    """Idle ping listener."""
     print("@Yo: Ping from server!")
     sock.send(b"i")
 
 
 def _l_handler(sock: socket, *args, **kwargs):
-    """LINE BREAK"""
+    """Line break."""
     bytes_data = ChatIO.unpack_data(sock)
     print(bytes_data.decode())
 
@@ -41,7 +40,7 @@ def _n_handler(sock: socket, *args, **kwargs):
 
 
 def _r_handler(sock: socket, *args, **kwargs):
-    """RECEIVE FILE AND WRITE TO DISK"""
+    """Receive file and write to disk."""
     download.write(sock=sock)
 
     # incoming = b""
@@ -63,14 +62,14 @@ def _r_handler(sock: socket, *args, **kwargs):
 
 
 def _s_handler(sock: socket, *args, **kwargs) -> bytes:
-    """INCOMING SERVER MESSAGES."""
+    """Incoming server messages."""
     bytes_data = ChatIO.unpack_data(sock)
     print(bytes_data.decode())
     return bytes_data
 
 
 def _t_handler(sock: socket, *args, **kwargs) -> bytes:
-    """Recieves pubkey from sender.
+    """Recieves public key from sender.
     Sender receives recip pub_key in _T_handler.
     """
     pub_key = ChatIO().unpack_data(sock)
@@ -81,7 +80,7 @@ def _t_handler(sock: socket, *args, **kwargs) -> bytes:
 
 
 def _u_handler(sock: socket, *args, **kwargs):
-    """UPLOAD FILE TO SERVER"""
+    """Upload file to server."""
     data = prefixes.dict["upload"]
 
     # if file exists:
@@ -97,7 +96,7 @@ def _u_handler(sock: socket, *args, **kwargs):
 
 
 def _C_handler(sock: socket, *args, **kwargs):
-    """INCOMING CMD LINE"""
+    """Incoming command line."""
     ChatIO.recv_open(sock)
     # sock.recv(1)
     # pass
@@ -108,7 +107,7 @@ def _H_handler(sock: socket, *args, **kwargs):
     return bytes_data
 
 def _K_handler(sock: socket, *args, **kwargs):
-    """Receives Keypack from Truster in b64."""
+    """Receives Keypack from Truster in b64 format."""
     enc_key_pack_64 = ChatIO.unpack_data(sock)
     enc_key_pack_hex = Base64Encoder.decode(enc_key_pack_64)
     CipherTools.unpack_keys_from_xfer(enc_key_pack_hex)
@@ -121,7 +120,7 @@ def _W_handler(sock: socket, *args, **kwargs):
 
 
 def _M_handler(sock: socket, *args, **kwargs) -> bytes:
-    """DEFAULT MESSAGE DICTS"""
+    """Default message dict handler."""
     bytes_data = ChatIO.unpack_data(sock)
     try:
         data_dict = json.loads(bytes_data)
@@ -150,7 +149,8 @@ def _M_handler(sock: socket, *args, **kwargs) -> bytes:
 
 
 def _T_handler(sock: socket, *args, **kwargs) -> bytes:
-    """RECEIVES PUBKEYS FROM SERVER. SENDS KEYPACK.
+    """Receives public keys from the server. Sends keypack.
+
     Recip receives sender pub_key in _t_handler
     """
 
