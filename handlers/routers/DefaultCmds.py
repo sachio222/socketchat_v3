@@ -1,11 +1,12 @@
-import sys
-import socket
+import sys, socket
 
 from chatutils import utils, passtools
 from chatutils.chatio2 import ChatIO
+from chatutils.channel2 import Chime
 
 from lib.xfer.FileXfer import *
 from handlers import EncryptionHandler
+
 from handlers.routers import EncryptionCmds
 
 import config.filepaths as paths
@@ -105,7 +106,6 @@ def sendfile(sock: socket, *args, **kwargs):
         print(e)
     print("file sent")
     return
-
     # SenderOperations().show_prompts(sock)
 
 
@@ -124,9 +124,8 @@ def status(*args, **kwargs):
 
 
 def mute(*args, **kwargs):
-    configs.dict["muted"] = True
-    configs.update()
-    ChatIO().print_message("@YO: Muted. Type /unmute to restore sound.")
+    print("@YO: Muted. Type /unmute to restore sound.")
+    Chime.mute_chime()
 
 
 def trust(sock: socket, *args, **kwargs):
@@ -138,9 +137,8 @@ def trust(sock: socket, *args, **kwargs):
 
 
 def unmute(*args, **kwargs):
-    configs.dict["muted"] = False
-    configs.update()
-    ChatIO().print_message("@YO: B00P! Type /mute to turn off sound.")
+    print("@YO: B00P! Type /mute to turn off sound.")
+    Chime.unmute_chime()
 
 
 dispatch = {
