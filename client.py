@@ -1,5 +1,6 @@
 #!/usr/bin/ python3
 """Encryptochat 2.0"""
+from chatutils.channel2 import Chime
 import socket, ssl
 from threading import Thread
 from chatutils import utils, channel2
