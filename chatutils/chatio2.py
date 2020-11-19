@@ -144,7 +144,14 @@ class ChatIO:
     def broadcast(self,
                   send_sock: socket,
                   buffer: dict,
-                  pfx_type: str = "default"):
+                  pfx_name: str = "default",
+                  target: str = "other"):
+        """Broadcast messages to multiple users.
+        
+        target="other": sends to everyone else.
+        target="self": sends to self from server.
+        target="all": sends to all connected users.
+        """
 
         msg_bytes = buffer["msg_bytes"]
 
@@ -159,10 +166,34 @@ class ChatIO:
         # except:
         #     print(msg_bytes)
         sockets = buffer["sockets"]
-        for s in sockets.values():
-            if s != send_sock:
-                self.pack_n_send(s, prefixes.dict["server"]["chat"][pfx_type],
-                                 msg_bytes)
+        if target == "other":
+            for s in sockets.values():
+                if s != send_sock:
+                    try:
+                        self.pack_n_send(s, prefixes.dict["server"]["chat"][pfx_name],
+                                        msg_bytes)
+                    except:
+                        continue
+
+        elif target == "all":
+            for s in sockets.values():
+                try:
+                    self.pack_n_send(s, prefixes.dict["server"]["chat"][pfx_name],
+                                    msg_bytes)
+                except:
+                    continue
+
+        elif target == "self":
+            for s in sockets.values():
+                if s == send_sock:
+                    try:
+                        self.pack_n_send(s, prefixes.dict["server"]["chat"][pfx_name],
+                                        msg_bytes)
+                    except:
+                        continue
+        else:
+            raise Exception("Valid options for broadcast are 'self', 'other', or 'all'.")
+
 
 
     def print_to_client(self, sender: str, msg: str, muted:bool = False):

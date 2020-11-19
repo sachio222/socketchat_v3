@@ -139,12 +139,14 @@ def _S_handler(sock: socket, buffer: dict, *args, **kwargs):
     users_online = []
     bytes_data = ChatIO.unpack_data(sock)
     print(bytes_data.decode())
+
     for k in buffer["sockets"].keys():
         users_online.append(k)
 
-    buffer = f'@Yo: {len(users_online)} online - {", ".join(users_online)}'
-    
-    ChatIO().broadcast(sock, buffer)
+    status_msg = f'@Yo: {len(users_online)} online - {", ".join(users_online)}'
+    buffer["msg_bytes"] = status_msg
+
+    ChatIO().broadcast(sock, buffer, pfx_name="sysMsg", target="self")
 
 
 
