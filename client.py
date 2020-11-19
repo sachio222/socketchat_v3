@@ -12,6 +12,7 @@ from lib.encryption import x509
 from config.pub import sysMsgList
 import config.filepaths as paths
 
+
 configs = utils.JSONLoader()
 prefixes = utils.JSONLoader(paths.prefix_path)
 
@@ -25,7 +26,6 @@ USER_ID = ""
 
 
 class Client(ChatIO):
-
     def __init__(self):
         pass
 
@@ -72,31 +72,20 @@ class Client(ChatIO):
 
     def listen(self, sock):
         while True:
-            # try:
-            msg_type = sock.recv(PREFIX_LEN)
+            msg_type = None
 
-            if not msg_type:
+            try:
+                msg_type = sock.recv(PREFIX_LEN)
+
+                if not msg_type:
+                    break
+
+                ClientMsgHandler.dispatch(sock, msg_type)
+
+            except:
                 break
 
-            ClientMsgHandler.dispatch(sock, msg_type)
-            # except:
-            #     response = b""
-            #     recv_len = 1
-
-            #     while recv_len:
-            #         data = sock.recv(BUFFER_LEN)
-            #         recv_len = len(data)
-            #         response += data
-
-            #         if recv_len < BUFFER_LEN:
-            #             break
-
-            #         if not data:
-            #             break
-
-            # print(response.decode())
-
-        Thread.join()
+        # Thread.join()
         channel2.killit(sock)
 
     def start_threads(self, sock):
@@ -114,7 +103,6 @@ def main():
 
 
 if __name__ == "__main__":
-
     # ******** SSL CONTEXT ********#
     x509.X509()
     rsa_key_path = paths.x509_path + 'rsa_key.pem'
