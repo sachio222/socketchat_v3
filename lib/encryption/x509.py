@@ -55,8 +55,9 @@ class X509():
                 key.private_bytes(
                     encoding=serialization.Encoding.PEM,
                     format=serialization.PrivateFormat.TraditionalOpenSSL,
-                    encryption_algorithm=serialization.BestAvailableEncryption(
-                        b' ')))
+                    # encryption_algorithm=serialization.BestAvailableEncryption(
+                    #     b' ')))
+                    encryption_algorithm=serialization.NoEncryption()))
         return key
 
     def load_private_rsa_key(self, path):
