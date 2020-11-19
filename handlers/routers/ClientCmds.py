@@ -7,7 +7,8 @@ from chatutils.chatio2 import ChatIO
 
 from lib.xfer import download
 from lib.encryption import CipherTools
-from handlers import DecryptionHandler, EncryptionHandler
+from handlers import DecryptionHandler
+from handlers.routers import DefaultCmds
 
 import config.filepaths as paths
 
@@ -164,6 +165,7 @@ def _T_handler(sock: socket, *args, **kwargs) -> bytes:
 def _W_handler(sock: socket, *args, **kwargs):
     """Welcome Message Handler."""
     bytes_data = ChatIO.unpack_data(sock)
+    DefaultCmds.status(sock)
     print(bytes_data.decode())
     return bytes_data
 
