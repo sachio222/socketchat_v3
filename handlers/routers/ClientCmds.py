@@ -113,10 +113,7 @@ def _K_handler(sock: socket, *args, **kwargs):
     CipherTools.unpack_keys_from_xfer(enc_key_pack_hex)
     print("[+] Symmetric keys unpacked.")
 
-def _W_handler(sock: socket, *args, **kwargs):
-    bytes_data = ChatIO.unpack_data(sock)
-    print(bytes_data.decode())
-    return bytes_data
+
 
 
 def _M_handler(sock: socket, *args, **kwargs) -> bytes:
@@ -162,6 +159,13 @@ def _T_handler(sock: socket, *args, **kwargs) -> bytes:
     key_pack_64 = Base64Encoder().encode(key_pack)
     ChatIO().pack_n_send(sock, prefixes.dict["server"]["cmds"]["trustKeys"], key_pack_64)
     return key_pack_64
+
+
+def _W_handler(sock: socket, *args, **kwargs):
+    """Welcome Message Handler."""
+    bytes_data = ChatIO.unpack_data(sock)
+    print(bytes_data.decode())
+    return bytes_data
 
 
 def error(sock: socket, *args, **kwargs):

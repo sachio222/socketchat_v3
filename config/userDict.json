@@ -1,1 +1,12 @@
-{}
+{
+    "Jake": {
+        "nick": "Jake",
+        "addr": [
+            "127.0.0.1",
+            63825
+        ],
+        "public_key": "HYpAG/oSc1gphNqBfXyrdO3ha03DDrmJO7aQpH58y08=",
+        "verify_key": "8i8WVZbqXVLVqUK5ujje4aicLDF09qhWhuDbXnMfaCU=",
+        "trusted": null
+    }
+}

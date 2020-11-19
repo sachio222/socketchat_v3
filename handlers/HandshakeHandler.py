@@ -115,7 +115,7 @@ class ServerSide(ChatIO):
             unique = self.is_unique(user)
 
         self.store_user(self.addr, user)
-        self.send_welcome_msg()
+        self.send_welcome_msg(user)
         return user
 
     def send_nick_request(self) -> bytes:
@@ -149,10 +149,14 @@ class ServerSide(ChatIO):
                          unique.encode())
         return unique
 
-    def send_welcome_msg(self):
+    def send_welcome_msg(self, user: str):
         self.pack_n_send(self.sock,
                          prefixes.dict["server"]["handshake"]["welcome"],
                          configs.dict["msg"]["welcome"])
+        self.pack_n_send(self.sock,
+                         prefixes.dict["server"]["handshake"]["welcome"],
+                         f'{user["nick"]}{configs.dict["msg"]["announcement"]}')
+                         
 
     def store_user(self,
                    addr: tuple,

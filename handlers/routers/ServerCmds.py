@@ -64,6 +64,13 @@ def _u_handler(sock: socket, buffer: dict, *args, **kwargs):
             break
 
 
+def _s_handler(sock: socket, buffer: dict, *args, **kwargs):
+    """SYSTEM MESSAGE HANDLER."""
+    msg_bytes = buffer["msg_bytes"] = ChatIO.unpack_data(sock)
+    print("System message is:", msg_bytes)
+    ChatIO().broadcast(sock, buffer, pfx_type="sysMsg")
+
+
 def _C_handler(sock: socket, *args, **kwargs):
     """COMMAND LINE CONTROL."""
     cmd.commands(sock)
@@ -97,8 +104,6 @@ def _K_handler(sock: socket, buffer: dict, *args, **kwargs):
                          enc_key_pack)
 
 
-
-
 def _M_handler(sock: socket, buffer: dict, *args, **kwargs) -> bytes:
     """DEFAULT MESSAGE HANDLER."""
     msg_bytes = buffer["msg_bytes"] = ChatIO.unpack_data(sock)
@@ -128,6 +133,21 @@ def _T_handler(sock: socket, buffer: dict, *args, **kwargs):
                          prefixes.dict["server"]["cmds"]["trustRcvr"],
                          pub_key_sender)
 
+    
+def _S_handler(sock: socket, buffer: dict, *args, **kwargs):
+    """Status report."""
+    users_online = []
+    bytes_data = ChatIO.unpack_data(sock)
+    print(bytes_data.decode())
+    for k in buffer["sockets"].keys():
+        users_online.append(k)
+
+    buffer = f'@Yo: {len(users_online)} online - {", ".join(users_online)}'
+    
+    ChatIO().broadcast(sock, buffer)
+
+
+
 
 def _X_handler(sock: socket, *args, **kwargs) -> bytes:
     """TRANSFER HANDLER"""
@@ -139,15 +159,10 @@ def _P_handler(sock: socket, *args, **kwargs):
     pass
 
 
-def _S_handler(sock: socket, buffer: dict, *args, **kwargs):
-    """SYSTEM MESSAGE HANDLER."""
-    msg_bytes = buffer["msg_bytes"] = ChatIO.unpack_data(sock)
-    print("System message is:", msg_bytes)
-    ChatIO().broadcast(sock, buffer, pfx_type="sysMsg")
-
 
 def error(*args, **kwargs):
-    print(f'Message Type Error: Invalid message type {kwargs["msg_type"]}')
+    print(kwargs)
+    # print(f'Message Type Error: Invalid message type {kwargs["msg_type"]}')
 
 
 dispatch = {
@@ -169,7 +184,7 @@ dispatch = {
     "p": None,
     "q": None,
     "r": None,
-    "s": None,
+    "s": _s_handler,
     "t": None,
     "u": _u_handler,
     "v": None,

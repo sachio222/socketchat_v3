@@ -115,14 +115,10 @@ def sendkey(*args, **kwargs):
     pass
 
 
-def status(*args, **kwargs):
+def status(sock: socket, *args, **kwargs):
     """Ask SERVER to broadcast who is online.
-    Join and strip. Send over full string.
     """
-    # print("workin on it...")
-    # msg = ' '.join(msg)
-    # msg = msg[1:]
-    # self.pack_n_send(sock, '/', msg)
+    ChatIO().pack_n_send(sock, prefixes.dict["client"]["cmds"]["status"], configs.dict["msg"]["sendStatus"])
 
 
 def mute(*args, **kwargs):

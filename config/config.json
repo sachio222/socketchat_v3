@@ -8,7 +8,8 @@
     "system": {
         "debug": false,
         "bufferLen": 4096,
-        "defaultHost": "69.142.161.132",
+        "defaultHostC": "69.142.161.132",
+        "defaultHost": "0.0.0.0",
         "defaultHostB": "192.168.68.142",
         "defaultPort": 12222,
         "headerLen": 10,
@@ -17,9 +18,11 @@
         "prefixLen": 1
     },
     "msg": {
+        "announcement": " is in the house!",
         "getNick": "[+] What is your name? @",
         "getNickAgain": "[x] User already exists. Try something else: @",
         "getNickErr": "[x] Handle needs at least one character. Try again",
+        "sendStatus": "[*] ==> Send Status",
         "welcome": "@Yo: You're in. Welcome to the underground."
     }
 }
