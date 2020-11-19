@@ -101,13 +101,14 @@ class ChatIO:
 
     @staticmethod
     def make_buffer(sockets_dict: dict, user_dict: dict,
-                    msg_type: bytes) -> dict:
-        buffer = {}
-        buffer["sender_nick"] = user_dict["nick"]
-        buffer["sockets"] = sockets_dict
-        buffer["msg_type"] = msg_type
-        buffer["msg_bytes"] = ""
-        return buffer
+                    msg_type: bytes, msg_bytes:str="") -> dict:
+
+        return {
+            'sender_nick': user_dict['nick'],
+            'sockets'    : sockets_dict,
+            'msg_type'   : msg_type,
+            'msg_bytes'  : msg_bytes
+        }
 
     def make_new_line_dict(self, msg_bytes, sender_nick) -> bytes:
         """SERVERSIDE: MAKE DICT FROM '/n' MESSAGE WITH SENDER + CIPHER TYPE ATTACHED.
@@ -213,4 +214,4 @@ class ChatIO:
 
     def print_to_client(self, sender: str, msg: str, muted: bool = False):
         Chime.play_chime()
-        print(f'@{sender}: {msg}')
+        print(f'\033[1;33;48m@{sender}\033[1;37;0m: {msg}')
