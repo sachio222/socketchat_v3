@@ -1,5 +1,5 @@
 {
-    "cipher": "goober",
+    "cipher": "aes256",
     "introduced": false,
     "muted": false,
     "session": {

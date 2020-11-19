@@ -149,15 +149,20 @@ class ChatIO:
                   target: str = "other",
                   sockets_dict: dict = None):
 
-        """Broadcast messages to multiple users. Requires buffer with list of 
-        connected sockets and message bytes.
+        """Broadcast messages to multiple users. Pass in buffer with list of 
+        connected sockets and message bytes. Default pfx_name is "msg", but
+        system messages from server should use "sysMsg".
+
+        To send a buffer as a string literal and not a dict, provide
+        sockets_dict a dict of sockets to broadcast to.
         
-        target="other": sends to everyone else.
-        target="self": sends to self from server.
         target="all": sends to all connected users.
+        target="self": sends to self from server.
+        target="other": sends to everyone else.
         """
+
         if type(buffer) == str:
-            # Makes valid with string as input and socket_dict
+            # Makes valid buffer with string as input and socket_dict
             msg_bytes = buffer
             sockets = sockets_dict
 
