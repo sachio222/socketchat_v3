@@ -10,6 +10,7 @@ from lib.encryption import CipherTools
 from handlers import DecryptionHandler
 from handlers.routers import DefaultCmds
 
+from config import sysMsgList
 import config.filepaths as paths
 
 configs = utils.JSONLoader()
@@ -112,7 +113,7 @@ def _K_handler(sock: socket, *args, **kwargs):
     enc_key_pack_64 = ChatIO.unpack_data(sock)
     enc_key_pack_hex = Base64Encoder.decode(enc_key_pack_64)
     CipherTools.unpack_keys_from_xfer(enc_key_pack_hex)
-    print("[+] Symmetric keys unpacked.")
+    print(sysMsgList.keysUnpacked)
 
 
 

@@ -12,6 +12,7 @@ from lib.encryption.aes256 import AES256Cipher
 from nacl.encoding import Base64Encoder, HexEncoder, RawEncoder
 from nacl.signing import SigningKey, VerifyKey
 
+from config import sysMsgList
 import config.filepaths as paths
 
 public_box = None
@@ -80,7 +81,7 @@ def unpack_keys_from_xfer(key_pack_hex:hex, path=paths.nacl_keys,
         XChaCha20Poly1305.write_key(Base64Encoder.decode(chacha_key))
 
     except:
-        print("[!] Keys not unpacked. Try again.")
+        print(sysMsgList.keysUnpackFail)
 
 
 def make_nacl_pub_box(pub_key: base64 = None,
