@@ -213,4 +213,4 @@ class ChatIO:
 
     def print_to_client(self, sender: str, msg: str, muted:bool = False):
         Chime.play_chime()
-        print(f'@{sender}: {msg}')
+        print(f'\033[1;33;48m@{sender}\033[1;37;0m: {msg}')
