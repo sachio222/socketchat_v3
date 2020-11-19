@@ -8,7 +8,7 @@ from lib.xfer.FileXfer import *
 from handlers import EncryptionHandler
 from handlers.routers import EncryptionCmds
 
-from config import sysMsgList
+from config.pub import sysMsgList
 import config.filepaths as paths
 configs = utils.JSONLoader()
 prefixes = utils.JSONLoader(paths.prefix_path)

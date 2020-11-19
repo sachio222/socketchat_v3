@@ -6,7 +6,7 @@ from lib.encryption import CipherTools
 
 from handlers.routers import HandshakeCmds
 
-from config import sysMsgList
+from config.pub import sysMsgList
 import config.filepaths as paths
 configs = utils.JSONLoader()
 prefixes = utils.JSONLoader(paths.prefix_path)
