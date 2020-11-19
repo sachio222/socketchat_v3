@@ -3,7 +3,6 @@
 .DS_Store
 ._DS_Store
 *_copy.*
-downloads/
 
 
 #-- nano tmp files
@@ -35,3 +34,11 @@ venv
 #-- conf files
 /config/config.json
 /config/userDict.json
+
+
+#-- sqlite
+/data/**/*
+
+
+#-- downloads folder
+/downloads/**/*
