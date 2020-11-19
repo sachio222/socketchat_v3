@@ -100,14 +100,16 @@ class ChatIO:
         return msg_bytes
 
     @staticmethod
-    def make_buffer(sockets_dict: dict, user_dict: dict,
-                    msg_type: bytes, msg_bytes:str="") -> dict:
+    def make_buffer(sockets_dict: dict,
+                    user_dict: dict,
+                    msg_type: bytes,
+                    msg_bytes: str = "") -> dict:
 
         return {
             'sender_nick': user_dict['nick'],
-            'sockets'    : sockets_dict,
-            'msg_type'   : msg_type,
-            'msg_bytes'  : msg_bytes
+            'sockets': sockets_dict,
+            'msg_type': msg_type,
+            'msg_bytes': msg_bytes
         }
 
     def make_new_line_dict(self, msg_bytes, sender_nick) -> bytes:
