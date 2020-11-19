@@ -7,6 +7,7 @@ from lib.encryption import x509
 from chatutils import utils
 from chatutils.chatio2 import ChatIO
 
+from config.pub import sysMsgList
 import config.filepaths as paths
 
 configs = utils.JSONLoader()
@@ -54,18 +55,22 @@ def handle_client(client_socket: socket, addr: tuple) -> None:
         sockets_dict, user_dict, "sysMsg",
         f"[+] {user_dict['nick']} has joined the chat.")
 
+    departure = ChatIO.make_buffer(
+        sockets_dict, user_dict, "sysMsg",
+        f"[-] {user_dict['nick']} has left the chat.")
+
     print(f"announcement={announcement}")
     ChatIO().broadcast(client_socket,
                        announcement,
                        "sysMsg",
-                       "other",
-                       sockets_dict=sockets_dict)
+                       "other")
 
     while True:
         msg_type = client_socket.recv(PREFIX_LEN)
         # utils.debug_(msg_type, "msg_type", "handle_cient", True)
 
         if not msg_type:
+            ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
             del sockets_dict[user_dict["nick"]]
             utils.delete_user(user_dict["nick"])
             break
