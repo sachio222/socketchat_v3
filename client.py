@@ -12,7 +12,6 @@ from lib.encryption import x509
 from config.pub import sysMsgList
 import config.filepaths as paths
 
-
 configs = utils.JSONLoader()
 prefixes = utils.JSONLoader(paths.prefix_path)
 
@@ -26,6 +25,7 @@ USER_ID = ""
 
 
 class Client(ChatIO):
+
     def __init__(self):
         pass
 
