@@ -20,7 +20,7 @@ def _i_handler(sock: socket, *args, **kwargs):
 def _l_handler(sock: socket, buffer: dict, *args, **kwargs):
     """RELAY LINE BREAK"""
     bytes_data = ChatIO.unpack_data(sock)
-    ChatIO().broadcast(sock, buffer, pfx_type="new_line")
+    ChatIO().broadcast(sock, buffer, pfx_name="newLine")
     return
 
 
@@ -68,7 +68,7 @@ def _s_handler(sock: socket, buffer: dict, *args, **kwargs):
     """SYSTEM MESSAGE HANDLER."""
     msg_bytes = buffer["msg_bytes"] = ChatIO.unpack_data(sock)
     print("System message is:", msg_bytes)
-    ChatIO().broadcast(sock, buffer, pfx_type="sysMsg")
+    ChatIO().broadcast(sock, buffer, pfxName="sysMsg")
 
 
 def _C_handler(sock: socket, *args, **kwargs):
