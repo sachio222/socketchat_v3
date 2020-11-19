@@ -135,25 +135,35 @@ class ChatIO:
         sender_nick = buffer["sender_nick"]
         msg_bytes = buffer["msg_bytes"]
 
-        if msg_bytes == "":
+        if msg_bytes == "" or msg_bytes == "\n":
             msg_bytes = self.make_new_line_dict(msg_bytes, sender_nick)
         else:
             msg_bytes = self.add_sender_nick(msg_bytes, sender_nick)
         return msg_bytes
 
+
     def broadcast(self,
                   send_sock: socket,
                   buffer: dict,
                   pfx_name: str = "default",
-                  target: str = "other"):
-        """Broadcast messages to multiple users.
+                  target: str = "other",
+                  sockets_dict: dict = None):
+
+        """Broadcast messages to multiple users. Requires buffer with list of 
+        connected sockets and message bytes.
         
         target="other": sends to everyone else.
         target="self": sends to self from server.
         target="all": sends to all connected users.
         """
+        if type(buffer) == str:
+            # Makes valid with string as input and socket_dict
+            msg_bytes = buffer
+            sockets = sockets_dict
 
-        msg_bytes = buffer["msg_bytes"]
+        else:
+            msg_bytes = buffer["msg_bytes"]
+            sockets = buffer["sockets"]
 
         # print(buffer)
         try:
@@ -165,7 +175,7 @@ class ChatIO:
         #     print(msg_bytes.decode())
         # except:
         #     print(msg_bytes)
-        sockets = buffer["sockets"]
+
         if target == "other":
             for s in sockets.values():
                 if s != send_sock:
