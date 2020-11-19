@@ -6,9 +6,9 @@ from chatutils.channel2 import Chime
 
 from lib.xfer.FileXfer import *
 from handlers import EncryptionHandler
-
 from handlers.routers import EncryptionCmds
 
+from config import sysMsgList
 import config.filepaths as paths
 configs = utils.JSONLoader()
 prefixes = utils.JSONLoader(paths.prefix_path)
@@ -118,7 +118,7 @@ def sendkey(*args, **kwargs):
 def status(sock: socket, *args, **kwargs):
     """Ask SERVER to broadcast who is online.
     """
-    ChatIO().pack_n_send(sock, prefixes.dict["client"]["cmds"]["status"], configs.dict["msg"]["sendStatus"])
+    ChatIO().pack_n_send(sock, prefixes.dict["client"]["cmds"]["status"], sysMsgList.sendStatus)
 
 
 def mute(*args, **kwargs):

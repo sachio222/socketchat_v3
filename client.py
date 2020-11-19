@@ -9,6 +9,7 @@ from chatutils.chatio2 import ChatIO
 from handlers import HandshakeHandler, InputHandler, ClientMsgHandler
 from lib.encryption import x509
 
+from config import sysMsgList
 import config.filepaths as paths
 
 configs = utils.JSONLoader()
@@ -48,7 +49,7 @@ class Client(ChatIO):
 
         except Exception as e:
             print(e)
-            print("[x] Connection failed. Check server address or port.")
+            print(sysMsgList.connectFailed)
 
     def send(self, sock):
         while True:

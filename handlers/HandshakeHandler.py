@@ -1,10 +1,12 @@
 import socket, json
+import sys
 from chatutils import utils, channel2
 from chatutils.chatio2 import ChatIO
 from lib.encryption import CipherTools
 
 from handlers.routers import HandshakeCmds
 
+from config import sysMsgList
 import config.filepaths as paths
 configs = utils.JSONLoader()
 prefixes = utils.JSONLoader(paths.prefix_path)
@@ -59,16 +61,16 @@ class ClientSide(ChatIO):
         if nick not in [""]:
             return True
         else:
-            print(configs.dict["msg"]["getNickErr"])
+            print(sysMsgList.getNickErr)
             return False
 
     def _create_payload(self, prompt: str) -> tuple:
         handshake_payload = {}
         nick = handshake_payload["nick"] = self.show_nick_request(prompt)
         handshake_payload["public_key"] = self.create_public_key().decode()
-        print("[+] New NACL keys generated.")
+        print(sysMsgList.keysNewPub)
         handshake_payload["verify_key"] = self.create_verify_key().decode()
-        print("[+] New NACL signing keys generated.")
+        print(sysMsgList.keysNewSign)
         handshake_payload = json.dumps(handshake_payload)
         handshake_payload = handshake_payload.encode()
         return handshake_payload, nick
@@ -99,7 +101,7 @@ class ServerSide(ChatIO):
         first_request = True
         unique = "False"
 
-        print("[/] Client trying to connect...")
+        print(sysMsgList.connectAttempt)
 
         while unique == "False":
 
@@ -122,14 +124,14 @@ class ServerSide(ChatIO):
         # Goes to handler
         self.pack_n_send(self.sock,
                          prefixes.dict["server"]["handshake"]["nick"],
-                         configs.dict["msg"]["getNick"])
+                         sysMsgList.getNick)
         user_json = self.recv_n_unpack(self.sock, shed_pfx=True)
         return user_json
 
     def resend_nick_request(self):
         self.pack_n_send(self.sock,
                          prefixes.dict["server"]["handshake"]["nick"],
-                         configs.dict["msg"]["getNickAgain"])
+                         sysMsgList.getNickAgain)
         user_json = self.recv_n_unpack(self.sock, shed_pfx=True)
         return user_json
 
@@ -152,12 +154,7 @@ class ServerSide(ChatIO):
     def send_welcome_msg(self):
         self.pack_n_send(self.sock,
                          prefixes.dict["server"]["handshake"]["welcome"],
-                         configs.dict["msg"]["welcome"])
-    
-    # def announce(self, user: str):
-    #     """Tell other users about join."""
-    #     announcement = f'{user["nick"]}{configs.dict["msg"]["announcement"]}'
-    #     ChatIO().broadcast(self.sock, announcement, "sysMsg", "other")
+                         sysMsgList.welcome)
                          
 
     def store_user(self,
