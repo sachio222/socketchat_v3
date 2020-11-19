@@ -77,7 +77,6 @@ def encryption(*args, **kwargs):
 
 def exit(sock: socket, *args, **kwargs):
     sock.close()
-    print("Server Disconnected.")
     sys.exit()
 
 
