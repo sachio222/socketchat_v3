@@ -1,5 +1,5 @@
 {
-    "cipher": "goober",
+    "cipher": "aes256",
     "introduced": false,
     "muted": false,
     "session": {
@@ -9,7 +9,7 @@
         "debug": false,
         "bufferLen": 4096,
         "defaultHost": "192.168.1.19",
-        "defaultHostB": "0.0.0.0",
+        "defaultHostB": "69.142.161.132",
         "defaultPort": 12222,
         "headerLen": 10,
         "idleTimeSec": 600,
@@ -17,9 +17,11 @@
         "prefixLen": 1
     },
     "msg": {
+        "announcement": " is in the house!",
         "getNick": "[+] What is your name? @",
         "getNickAgain": "[x] User already exists. Try something else: @",
         "getNickErr": "[x] Handle needs at least one character. Try again",
+        "sendStatus": "[*] ==> Send Status",
         "welcome": "@Yo: You're in. Welcome to the underground."
     }
 }

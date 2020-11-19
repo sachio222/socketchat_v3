@@ -12,6 +12,7 @@
             "xfer": "X"
         },
         "cmds":{
+            "status":"S",
             "trust": "T",
             "trustKeys": "K"
         },
@@ -35,6 +36,7 @@
             "xfer": "X"
         },
         "cmds": {
+            "status": "S",
             "trustSndr": "T",
             "trustRcvr": "t",
             "trustKeys": "K"

@@ -47,9 +47,10 @@ def accept_client(server):
 def handle_client(client_socket: socket, addr: tuple) -> None:
 
     user_dict = HandshakeHandler.ServerSide(client_socket, addr).user
-    print(f"[+] {user_dict['nick']} has joined the chat.")
-
     sockets_dict[user_dict["nick"]] = client_socket
+    announcement = f"[+] {user_dict['nick']} has joined the chat."
+    print(announcement)
+    ChatIO().broadcast(client_socket, announcement, "sysMsg", "other", sockets_dict=sockets_dict)
 
     while True:
         msg_type = client_socket.recv(PREFIX_LEN)
