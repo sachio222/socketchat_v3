@@ -1,33 +1,37 @@
 
+#-- osx meta files
+.DS_Store
+._DS_Store
+*_copy.*
+downloads/
+
+
+#-- nano tmp files
+/**/*.swp
+/**/*.save
+/**/*~
+
+
+#-- vs code meta
+/.vscode
+
+
 #-- py caching
 /**/__pycache__
 /**/*.pyc
 
-#-- key file
-/**/*.key
-*.pem
 
 #-- temp stuff
 /tmp
 venv
 *_copy.*
 
-#-- osx meta files
-.DS_Store
-._DS_Store
-<<<<<<< HEAD
-*_copy.*
-downloads/
-=======
 
-#-- nano files
-/**/*.swp
-/**/*.save
-/**/*~
-
-#-- vs code meta
-/.vscode
+#-- private keys
+/**/*.key
+*.pem
 
 
-#-- cfg
-config/config.json
+#-- conf files
+/config/config.json
+/config/userDict.json
