@@ -153,6 +153,12 @@ class ServerSide(ChatIO):
         self.pack_n_send(self.sock,
                          prefixes.dict["server"]["handshake"]["welcome"],
                          configs.dict["msg"]["welcome"])
+    
+    # def announce(self, user: str):
+    #     """Tell other users about join."""
+    #     announcement = f'{user["nick"]}{configs.dict["msg"]["announcement"]}'
+    #     ChatIO().broadcast(self.sock, announcement, "sysMsg", "other")
+                         
 
     def store_user(self,
                    addr: tuple,

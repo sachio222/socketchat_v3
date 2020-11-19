@@ -21,6 +21,7 @@ def about(*args, **kwargs):
 
 
 def cli(*args, **kwargs):
+    """Command line on server."""
     if passtools.request_password("cli"):
         print(
             "[+] Alert: Don't use vim or nano, it'll lock both server and client."
@@ -43,6 +44,7 @@ def cli(*args, **kwargs):
 
 
 def encryption(*args, **kwargs):
+    """Shows encryption types and list."""
     msg_parts = kwargs["msg_parts"]
 
     def set_cipher(msg):
@@ -113,14 +115,10 @@ def sendkey(*args, **kwargs):
     pass
 
 
-def status(*args, **kwargs):
+def status(sock: socket, *args, **kwargs):
     """Ask SERVER to broadcast who is online.
-    Join and strip. Send over full string.
     """
-    # print("workin on it...")
-    # msg = ' '.join(msg)
-    # msg = msg[1:]
-    # self.pack_n_send(sock, '/', msg)
+    ChatIO().pack_n_send(sock, prefixes.dict["client"]["cmds"]["status"], configs.dict["msg"]["sendStatus"])
 
 
 def mute(*args, **kwargs):
@@ -129,7 +127,7 @@ def mute(*args, **kwargs):
 
 
 def trust(sock: socket, *args, **kwargs):
-    """TELL SERVER TO SEND PUBKEYS"""
+    """Tell server to send public keys."""
     ChatIO().pack_n_send(sock, prefixes.dict["client"]["cmds"]["trust"],
                          "user_names")
     # SERVER: check other users, grab identities, send to truster.
