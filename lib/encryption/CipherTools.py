@@ -12,7 +12,7 @@ from lib.encryption.aes256 import AES256Cipher
 from nacl.encoding import Base64Encoder, HexEncoder, RawEncoder
 from nacl.signing import SigningKey, VerifyKey
 
-from config import sysMsgList
+from config.pub import sysMsgList
 import config.filepaths as paths
 
 public_box = None

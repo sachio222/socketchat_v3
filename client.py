@@ -9,7 +9,7 @@ from chatutils.chatio2 import ChatIO
 from handlers import HandshakeHandler, InputHandler, ClientMsgHandler
 from lib.encryption import x509
 
-from config import sysMsgList
+from config.pub import sysMsgList
 import config.filepaths as paths
 
 configs = utils.JSONLoader()

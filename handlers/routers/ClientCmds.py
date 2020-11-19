@@ -10,7 +10,7 @@ from lib.encryption import CipherTools
 from handlers import DecryptionHandler
 from handlers.routers import DefaultCmds
 
-from config import sysMsgList
+from config.pub import sysMsgList
 import config.filepaths as paths
 
 configs = utils.JSONLoader()
