@@ -7,7 +7,7 @@ def fernet(data: dict) -> bytes:
     try:
         decrypted_data = FernetCipher().decrypt(data)
     except:
-        decrypted_data =  goober(data)
+        decrypted_data = goober(data)
     return decrypted_data
 
 
@@ -15,7 +15,7 @@ def aes256_ctc(data) -> bytes:
     try:
         decrypted_data = AES256Cipher().full_decryption(data)
     except:
-        decrypted_data =  goober(data)
+        decrypted_data = goober(data)
     return decrypted_data
 
 
@@ -42,7 +42,7 @@ def chacha20_poly1305(data):
     try:
         decrypted_data = XChaCha20Poly1305.decrypt(data)
     except:
-        decrypted_data =  goober(data)
+        decrypted_data = goober(data)
     return decrypted_data
 
 

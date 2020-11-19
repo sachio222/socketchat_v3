@@ -18,6 +18,7 @@ prefixes = utils.JSONLoader(paths.prefix_path)
 
 BUFFER_LEN = configs.dict["system"]["bufferLen"]
 
+
 def _f_handler(sock: socket, *args, **kwargs):
     """Incoming file info."""
     pass
@@ -103,10 +104,12 @@ def _C_handler(sock: socket, *args, **kwargs):
     # sock.recv(1)
     # pass
 
+
 def _H_handler(sock: socket, *args, **kwargs):
     bytes_data = ChatIO.unpack_data(sock)
     print(bytes_data)
     return bytes_data
+
 
 def _K_handler(sock: socket, *args, **kwargs):
     """Receives Keypack from Truster in b64 format."""
@@ -114,8 +117,6 @@ def _K_handler(sock: socket, *args, **kwargs):
     enc_key_pack_hex = Base64Encoder.decode(enc_key_pack_64)
     CipherTools.unpack_keys_from_xfer(enc_key_pack_hex)
     print(sysMsgList.keysUnpacked)
-
-
 
 
 def _M_handler(sock: socket, *args, **kwargs) -> bytes:
@@ -126,7 +127,7 @@ def _M_handler(sock: socket, *args, **kwargs) -> bytes:
     except:
         data_dict = bytes_data
     sender, msg = DecryptionHandler.message_router(data_dict)
-    
+
     ChatIO.print_to_client(ChatIO, sender, msg)
 
     return bytes_data
@@ -159,7 +160,8 @@ def _T_handler(sock: socket, *args, **kwargs) -> bytes:
     # "We each get keys"
     key_pack = CipherTools.pack_keys_for_xfer(pub_key)
     key_pack_64 = Base64Encoder().encode(key_pack)
-    ChatIO().pack_n_send(sock, prefixes.dict["server"]["cmds"]["trustKeys"], key_pack_64)
+    ChatIO().pack_n_send(sock, prefixes.dict["server"]["cmds"]["trustKeys"],
+                         key_pack_64)
     return key_pack_64
 
 
