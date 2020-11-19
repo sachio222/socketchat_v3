@@ -87,6 +87,7 @@ def _H_handler(sock: socket, *args, **kwargs) -> bytes:
     bytes_data = ChatIO.unpack_data(sock)
     return bytes_data
 
+
 def _K_handler(sock: socket, buffer: dict, *args, **kwargs):
     """Relays key_packet to trustee."""
     recip_socket = None
@@ -121,7 +122,8 @@ def _T_handler(sock: socket, buffer: dict, *args, **kwargs):
     user = ChatIO.unpack_data(sock)
     # Get keys from user_dict
     # TODO: pass in recip name.
-    pub_key_sender, pub_key_recip, ver_key_sender, ver_key_recip = key_xchange.get_keys(sender_nick)
+    pub_key_sender, pub_key_recip, ver_key_sender, ver_key_recip = key_xchange.get_keys(
+        sender_nick)
 
     for socket in buffer["sockets"].items():
         if socket[1] != sock:
@@ -133,7 +135,7 @@ def _T_handler(sock: socket, buffer: dict, *args, **kwargs):
                          prefixes.dict["server"]["cmds"]["trustRcvr"],
                          pub_key_sender)
 
-    
+
 def _S_handler(sock: socket, buffer: dict, *args, **kwargs):
     """Status report."""
     users_online = []
@@ -149,8 +151,6 @@ def _S_handler(sock: socket, buffer: dict, *args, **kwargs):
     ChatIO().broadcast(sock, buffer, pfx_name="sysMsg", target="self")
 
 
-
-
 def _X_handler(sock: socket, *args, **kwargs) -> bytes:
     """TRANSFER HANDLER"""
     pass
@@ -159,7 +159,6 @@ def _X_handler(sock: socket, *args, **kwargs) -> bytes:
 def _P_handler(sock: socket, *args, **kwargs):
     """ADD PUBLIC KEY"""
     pass
-
 
 
 def error(*args, **kwargs):

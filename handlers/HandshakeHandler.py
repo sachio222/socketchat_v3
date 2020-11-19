@@ -76,7 +76,7 @@ class ClientSide(ChatIO):
         return handshake_payload, nick
 
     def create_public_key(self) -> bytes:
-        _, pubk= CipherTools.gen_nacl_keys()
+        _, pubk = CipherTools.gen_nacl_keys()
         return pubk
 
     def create_verify_key(self) -> bytes:
@@ -155,7 +155,6 @@ class ServerSide(ChatIO):
         self.pack_n_send(self.sock,
                          prefixes.dict["server"]["handshake"]["welcome"],
                          sysMsgList.welcome)
-                         
 
     def store_user(self,
                    addr: tuple,

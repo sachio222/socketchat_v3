@@ -15,7 +15,7 @@ BUFFER_LEN = configs.dict["system"]["bufferLen"]
 
 
 class ChatIO:
-    
+
     def __init__(self):
         pass
 
@@ -141,14 +141,12 @@ class ChatIO:
             msg_bytes = self.add_sender_nick(msg_bytes, sender_nick)
         return msg_bytes
 
-
     def broadcast(self,
                   send_sock: socket,
                   buffer: dict,
                   pfx_name: str = "default",
                   target: str = "other",
                   sockets_dict: dict = None):
-
         """Broadcast messages to multiple users. Pass in buffer with list of 
         connected sockets and message bytes. Default pfx_name is "msg", but
         system messages from server should use "sysMsg".
@@ -185,16 +183,18 @@ class ChatIO:
             for s in sockets.values():
                 if s != send_sock:
                     try:
-                        self.pack_n_send(s, prefixes.dict["server"]["chat"][pfx_name],
-                                        msg_bytes)
+                        self.pack_n_send(
+                            s, prefixes.dict["server"]["chat"][pfx_name],
+                            msg_bytes)
                     except:
                         continue
 
         elif target == "all":
             for s in sockets.values():
                 try:
-                    self.pack_n_send(s, prefixes.dict["server"]["chat"][pfx_name],
-                                    msg_bytes)
+                    self.pack_n_send(s,
+                                     prefixes.dict["server"]["chat"][pfx_name],
+                                     msg_bytes)
                 except:
                     continue
 
@@ -202,15 +202,15 @@ class ChatIO:
             for s in sockets.values():
                 if s == send_sock:
                     try:
-                        self.pack_n_send(s, prefixes.dict["server"]["chat"][pfx_name],
-                                        msg_bytes)
+                        self.pack_n_send(
+                            s, prefixes.dict["server"]["chat"][pfx_name],
+                            msg_bytes)
                     except:
                         continue
         else:
-            raise Exception("Valid options for broadcast are 'self', 'other', or 'all'.")
+            raise Exception(
+                "Valid options for broadcast are 'self', 'other', or 'all'.")
 
-
-
-    def print_to_client(self, sender: str, msg: str, muted:bool = False):
+    def print_to_client(self, sender: str, msg: str, muted: bool = False):
         Chime.play_chime()
         print(f'@{sender}: {msg}')

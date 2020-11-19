@@ -1,5 +1,6 @@
 import argparse
 
+
 def ArgParser():
     host, port = None
 
@@ -53,5 +54,5 @@ def ArgParser():
         else:
             port = args.port
             print(f'-+- Port: {port}')
-    
+
     return args

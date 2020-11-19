@@ -17,24 +17,28 @@ import config.filepaths as paths
 
 public_box = None
 
+
 def renew_keys():
     FernetCipher().generate_key()
     AES256Cipher().generate_key()
+
 
 def gen_nacl_keys(path=paths.nacl_keys, *args, **kwargs) -> tuple:
     """Generates public and private keys with nacl algorithm."""
     prvk, pubk = NaclCipher.generate_keys(path)
     prvk_b64 = prvk.encode(encoder=Base64Encoder)
     pubk_b64 = pubk.encode(encoder=Base64Encoder)
-    
+
     return prvk_b64, pubk_b64
+
 
 def gen_nacl_sign_keys(path=paths.nacl_keys, *args, **kwargs) -> tuple:
     sgnk, vfyk = NaclCipher.generate_signing_keys()
     sgnk_b64 = sgnk.encode(encoder=Base64Encoder)
     vfyk_b64 = vfyk.encode(encoder=Base64Encoder)
-    
+
     return sgnk_b64, vfyk_b64
+
 
 def pack_keys_for_xfer(pub_nacl_key: base64 = None,
                        prv_nacl_key: base64 = None,
@@ -61,9 +65,11 @@ def pack_keys_for_xfer(pub_nacl_key: base64 = None,
 
     return enc_keys
 
-def unpack_keys_from_xfer(key_pack_hex:hex, path=paths.nacl_keys,
-                       *args,
-                       **kwargs):
+
+def unpack_keys_from_xfer(key_pack_hex: hex,
+                          path=paths.nacl_keys,
+                          *args,
+                          **kwargs):
     """Unpacks key pack from truster."""
     global public_box
 
@@ -95,7 +101,7 @@ def make_nacl_pub_box(pub_key: base64 = None,
     prv_key = NaclCipher.load_prv_key() or prv_key
     public_box = NaclCipher.make_public_box(prv_key, pub_key)
     nacl_shrk = NaclCipher.gen_shared_key(public_box)
-    
+
     # print("-" * 60)
     # print("Sharedkey", nacl_shrk)
     # print("-" * 60)

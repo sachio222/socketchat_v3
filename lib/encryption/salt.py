@@ -233,6 +233,7 @@ class NaclCipher():
         verify_key = VerifyKey(verify_key_b64, encoder=Base64Encoder)
         return verify_key
 
+
 #=== General Utilities ===#
 def check_dir(path: str = PATH):
     if not os.path.exists(path):

@@ -8,7 +8,7 @@ def message_router(data_dict: dict) -> tuple:
     cipher_text = data_dict["msg_pack"]
 
     func = DecryptionCmds.cipher_dict.get(cipher, DecryptionCmds.goober)
-    
+
     try:
         plain_text = func(cipher_text).decode()
 
