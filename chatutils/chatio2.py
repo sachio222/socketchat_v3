@@ -164,6 +164,7 @@ class ChatIO:
                 self.pack_n_send(s, prefixes.dict["server"]["chat"][pfx_type],
                                  msg_bytes)
 
+
     def print_to_client(self, sender: str, msg: str, muted:bool = False):
         Chime.play_chime()
         print(f'@{sender}: {msg}')
