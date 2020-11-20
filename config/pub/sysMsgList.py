@@ -21,4 +21,5 @@ keysNewSign = "[+] New NACL signing keys generated."
 # Server Messages
 connectAttempt = "[/] Client trying to connect..."
 connectFailed = "[x] Connection failed. Check server address or port."
+connectListening = "[*] Listening for connections..."
 sendStatus = "[*] ===> Send Status"
