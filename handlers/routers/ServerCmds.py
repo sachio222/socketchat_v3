@@ -32,6 +32,7 @@ def _b_handler(sock: socket, buffer: dict, *args, **kwargs):
                                 sysMsgList.bootSelf)
                 else:
                     # Booter is not self.
+                    print(f'[!] {bootee} has been kicked.')
                     ChatIO().pack_n_send(sock,
                                 prefixes.dict["server"]["chat"]["sysMsg"],
                                 f"{sysMsgList.bootSuccess} {bootee}")
