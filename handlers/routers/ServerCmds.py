@@ -42,7 +42,7 @@ def _b_handler(sock: socket, buffer: dict, *args, **kwargs):
                                 sysMsgList.bootMsg)
                     
                     buffer["sockets"][nick].close()
-                    utils.delete_user(bootee)
+                    # utils.delete_user(bootee)
                     break
             else:
                 continue
