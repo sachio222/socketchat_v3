@@ -7,7 +7,6 @@ from lib.encryption import x509
 from chatutils import utils
 from chatutils.chatio2 import ChatIO
 
-from config.pub import sysMsgList
 import config.filepaths as paths
 
 configs = utils.JSONLoader()
@@ -66,19 +65,23 @@ def handle_client(client_socket: socket, addr: tuple) -> None:
                        "other")
 
     while True:
-        msg_type = client_socket.recv(PREFIX_LEN)
-        # utils.debug_(msg_type, "msg_type", "handle_cient", True)
+        try:
+            msg_type = client_socket.recv(PREFIX_LEN)
+            # utils.debug_(msg_type, "msg_type", "handle_cient", True)
 
-        if not msg_type:
-            ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
-            del sockets_dict[user_dict["nick"]]
-            utils.delete_user(user_dict["nick"])
-            break
+            if not msg_type:
+                ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
+                del sockets_dict[user_dict["nick"]]
+                utils.delete_user(user_dict["nick"])
+                break
 
-        buffer = ChatIO.make_buffer(sockets_dict, user_dict, msg_type)
-        # utils.debug_(buffer, "buffer")
+            buffer = ChatIO.make_buffer(sockets_dict, user_dict, msg_type)
+            # utils.debug_(buffer, "buffer")
 
-        ServMsgHandler.dispatch(client_socket, buffer)
+            ServMsgHandler.dispatch(client_socket, buffer)
+
+        except:
+            pass
 
     client_socket.close()
 
