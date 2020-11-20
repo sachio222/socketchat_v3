@@ -10,6 +10,7 @@ from handlers.routers import EncryptionCmds
 
 from config.pub import sysMsgList
 import config.filepaths as paths
+
 configs = utils.JSONLoader()
 prefixes = utils.JSONLoader(paths.prefix_path)
 
@@ -18,6 +19,15 @@ def about(*args, **kwargs):
     """Read from file in config folder."""
     path = paths.about
     utils.print_from_file(path)
+
+
+def boot(sock: socket, msg_parts: list, *args, **kwargs):
+    """Boot user from room."""
+    if msg_parts[1:]:
+        bootee = " ".join(msg_parts[1:])
+        ChatIO().pack_n_send(sock, prefixes.dict["client"]["cmds"]["boot"], bootee)
+    else:
+        print(sysMsgList.bootNoUser)
 
 
 def cli(*args, **kwargs):
@@ -77,7 +87,6 @@ def encryption(*args, **kwargs):
 
 def exit(sock: socket, *args, **kwargs):
     sock.close()
-    print("Server Disconnected.")
     sys.exit()
 
 
@@ -142,6 +151,7 @@ def unmute(*args, **kwargs):
 
 dispatch = {
     '/about': about,
+    '/boot': boot,
     '/close': exit,
     '/cryp': encryption,
     '/encryption': encryption,
