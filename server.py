@@ -81,9 +81,12 @@ def handle_client(client_socket: socket, addr: tuple) -> None:
             ServMsgHandler.dispatch(client_socket, buffer)
 
         except:
-            ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
-            del sockets_dict[user_dict["nick"]]
-            utils.delete_user(user_dict["nick"])
+            try:
+                ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
+                del sockets_dict[user_dict["nick"]]
+                utils.delete_user(user_dict["nick"])
+            except:
+                pass
             break
 
     client_socket.close()
