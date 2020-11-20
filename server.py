@@ -74,7 +74,10 @@ def handle_client(client_socket: socket, addr: tuple) -> None:
         if not msg_type:
             ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
             del sockets_dict[user_dict["nick"]]
-            utils.delete_user(user_dict["nick"])
+            try:
+                utils.delete_user(user_dict["nick"])
+            except:
+                pass
             break
 
         buffer = ChatIO.make_buffer(sockets_dict, user_dict, msg_type)
