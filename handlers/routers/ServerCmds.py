@@ -1,3 +1,4 @@
+from chatutils import channel2
 import socket
 from chatutils import utils
 from chatutils.chatio2 import ChatIO
@@ -5,12 +6,52 @@ from handlers import HandshakeHandler
 from lib.cmd import cmd
 from lib.key_xfer import key_xchange
 
+from config.pub import sysMsgList
 import config.filepaths as paths
+
 configs = utils.JSONLoader()
 prefixes = utils.JSONLoader(paths.prefix_path)
 
 HEADER_LEN = configs.dict["system"]["headerLen"]
 BUFFER_LEN = configs.dict["system"]["bufferLen"]
+
+
+def _b_handler(sock: socket, buffer: dict, *args, **kwargs):
+    """Boot user."""
+    bootee = ChatIO.unpack_data(sock).decode()
+
+    if bootee in buffer["sockets"]:
+
+        for nick in buffer["sockets"]:
+            if nick == bootee:
+                # Bootee sock matches Booter sock.
+                if buffer["sockets"][nick] == sock:
+                    # Booter can't boot self.
+                    ChatIO().pack_n_send(sock,
+                                prefixes.dict["server"]["chat"]["sysMsg"],
+                                sysMsgList.bootSelf)
+                else:
+                    # Booter is not self.
+                    ChatIO().pack_n_send(sock,
+                                prefixes.dict["server"]["chat"]["sysMsg"],
+                                f"{sysMsgList.bootSuccess} {bootee}")
+                    
+                    ChatIO().pack_n_send(buffer["sockets"][nick],
+                                prefixes.dict["server"]["chat"]["sysMsg"],
+                                sysMsgList.bootMsg)
+                    
+                    buffer["sockets"][nick].close()
+                    utils.delete_user(bootee)
+                    break
+            else:
+                continue
+
+            break
+                    
+    else:
+        ChatIO().pack_n_send(sock,
+                        prefixes.dict["server"]["chat"]["sysMsg"],
+                        sysMsgList.bootUserNotFound)          
 
 
 def _i_handler(sock: socket, *args, **kwargs):
@@ -168,7 +209,7 @@ def error(*args, **kwargs):
 
 dispatch = {
     "a": None,
-    "b": None,
+    "b": _b_handler,
     "c": None,
     "d": None,
     "e": None,

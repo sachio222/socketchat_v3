@@ -12,6 +12,7 @@
             "xfer": "X"
         },
         "cmds":{
+            "boot": "b",
             "status":"S",
             "trust": "T",
             "trustKeys": "K"

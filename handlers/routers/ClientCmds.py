@@ -126,9 +126,13 @@ def _M_handler(sock: socket, *args, **kwargs) -> bytes:
         data_dict = json.loads(bytes_data)
     except:
         data_dict = bytes_data
-    sender, msg = DecryptionHandler.message_router(data_dict)
 
-    ChatIO.print_to_client(ChatIO, sender, msg)
+    try:
+        sender, msg = DecryptionHandler.message_router(data_dict)
+        ChatIO.print_to_client(ChatIO, sender, msg)
+    except:
+        print("[x] Decryption error. Must pass in a data dict.")
+
 
     return bytes_data
 
@@ -189,7 +193,7 @@ dispatch = {
     "i": _i_handler,
     "j": None,
     "k": None,
-    "l": _M_handler,
+    "l": _l_handler,
     "m": None,
     "n": _n_handler,
     "o": None,
