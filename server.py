@@ -7,6 +7,7 @@ from lib.encryption import x509
 from chatutils import utils
 from chatutils.chatio2 import ChatIO
 
+from config.pub import sysMsgList
 import config.filepaths as paths
 
 configs = utils.JSONLoader()
@@ -113,7 +114,7 @@ def main():
     server.bind(ADDR)
     print(f"[*] Server spinning up at {ADDR}")
     server.listen(5)
-    print(f"[*] Listening for connections...")
+    print(sysMsgList.connectListening)
 
     accept_thread = Thread(target=accept_client, args=(server,))
     accept_thread.start()

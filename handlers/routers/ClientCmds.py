@@ -193,7 +193,7 @@ dispatch = {
     "i": _i_handler,
     "j": None,
     "k": None,
-    "l": _l_handler,
+    "l": _M_handler,
     "m": None,
     "n": _n_handler,
     "o": None,
