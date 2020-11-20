@@ -31,7 +31,7 @@ def _b_handler(sock: socket, buffer: dict, *args, **kwargs):
                                 prefixes.dict["server"]["chat"]["sysMsg"],
                                 sysMsgList.bootSelf)
                 else:
-                    Booter is not self.
+                    # Booter is not self.
                     ChatIO().pack_n_send(sock,
                                 prefixes.dict["server"]["chat"]["sysMsg"],
                                 f"{sysMsgList.bootSuccess} {bootee}")
