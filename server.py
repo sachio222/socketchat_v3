@@ -7,6 +7,7 @@ from lib.encryption import x509
 from chatutils import utils
 from chatutils.chatio2 import ChatIO
 
+from config.pub import sysMsgList
 import config.filepaths as paths
 
 configs = utils.JSONLoader()
@@ -68,26 +69,22 @@ def handle_client(client_socket: socket, addr: tuple) -> None:
         try:
             msg_type = client_socket.recv(PREFIX_LEN)
             # utils.debug_(msg_type, "msg_type", "handle_cient", True)
-
-            if not msg_type:
-                ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
-                del sockets_dict[user_dict["nick"]]
-                utils.delete_user(user_dict["nick"])
-                break
-
-            buffer = ChatIO.make_buffer(sockets_dict, user_dict, msg_type)
-            # utils.debug_(buffer, "buffer")
-
-            ServMsgHandler.dispatch(client_socket, buffer)
-
         except:
+            msg_type = None
+
+        if not msg_type:
             ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
+            del sockets_dict[user_dict["nick"]]
             try:
-                del sockets_dict[user_dict["nick"]]
                 utils.delete_user(user_dict["nick"])
             except:
                 pass
             break
+
+        buffer = ChatIO.make_buffer(sockets_dict, user_dict, msg_type)
+        # utils.debug_(buffer, "buffer")
+
+        ServMsgHandler.dispatch(client_socket, buffer)
 
     client_socket.close()
 
@@ -117,7 +114,7 @@ def main():
     server.bind(ADDR)
     print(f"[*] Server spinning up at {ADDR}")
     server.listen(5)
-    print(f"[*] Listening for connections...")
+    print(sysMsgList.connectListening)
 
     accept_thread = Thread(target=accept_client, args=(server,))
     accept_thread.start()
