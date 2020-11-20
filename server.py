@@ -68,26 +68,19 @@ def handle_client(client_socket: socket, addr: tuple) -> None:
         try:
             msg_type = client_socket.recv(PREFIX_LEN)
             # utils.debug_(msg_type, "msg_type", "handle_cient", True)
-
-            if not msg_type:
-                ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
-                del sockets_dict[user_dict["nick"]]
-                utils.delete_user(user_dict["nick"])
-                break
-
-            buffer = ChatIO.make_buffer(sockets_dict, user_dict, msg_type)
-            # utils.debug_(buffer, "buffer")
-
-            ServMsgHandler.dispatch(client_socket, buffer)
-
         except:
+            msg_type = None
+
+        if not msg_type:
             ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
-            try:
-                del sockets_dict[user_dict["nick"]]
-                utils.delete_user(user_dict["nick"])
-            except:
-                pass
+            del sockets_dict[user_dict["nick"]]
+            utils.delete_user(user_dict["nick"])
             break
+
+        buffer = ChatIO.make_buffer(sockets_dict, user_dict, msg_type)
+        # utils.debug_(buffer, "buffer")
+
+        ServMsgHandler.dispatch(client_socket, buffer)
 
     client_socket.close()
 
