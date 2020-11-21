@@ -1,5 +1,5 @@
 from chatutils import channel2
-import socket
+import socket, sys
 from chatutils import utils
 from chatutils.chatio2 import ChatIO
 from handlers import HandshakeHandler
@@ -42,8 +42,9 @@ def _b_handler(sock: socket, buffer: dict, *args, **kwargs):
                                 sysMsgList.bootMsg)
                     
                     buffer["sockets"][nick].close()
+                    # sys.exit()
                     # utils.delete_user(bootee)
-                    break
+                    return
             else:
                 continue
 

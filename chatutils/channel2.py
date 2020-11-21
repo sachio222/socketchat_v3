@@ -6,9 +6,12 @@ configs = utils.JSONLoader()
 
 
 def killit(sock: socket):
-    sock.close()
-    print("[x] Server Disconnected.")
-    sys.exit()
+    try:
+        sock.close()
+        print("[x] Server Disconnected.")
+        sys.exit()
+    except:
+        pass
 
 
 class Chime:

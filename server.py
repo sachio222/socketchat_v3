@@ -1,4 +1,5 @@
-import socket, ssl
+from chatutils import channel2
+import socket, ssl, sys
 
 from threading import Thread
 from handlers import HandshakeHandler, ServMsgHandler
@@ -74,6 +75,7 @@ def handle_client(client_socket: socket, addr: tuple) -> None:
 
         if not msg_type:
             ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
+            print(f'[x] {user_dict["nick"]} has disconnected.')
             del sockets_dict[user_dict["nick"]]
             try:
                 utils.delete_user(user_dict["nick"])
@@ -86,7 +88,12 @@ def handle_client(client_socket: socket, addr: tuple) -> None:
 
         ServMsgHandler.dispatch(client_socket, buffer)
 
+
     client_socket.close()
+    
+    sys.exit() # Close Thread
+
+    
 
 
 def das_boot():
