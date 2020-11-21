@@ -64,7 +64,7 @@ def _l_handler(sock: socket, buffer: dict, *args, **kwargs):
     """RELAY LINE BREAK"""
     bytes_data = ChatIO.unpack_data(sock)
     print(bytes_data)
-    print(buffer)
+    # print(buffer)
     ChatIO().broadcast(sock, buffer, pfx_name="newLine")
     return
 
