@@ -88,9 +88,9 @@ def handle_client(client_socket: socket, addr: tuple) -> None:
 
         ServMsgHandler.dispatch(client_socket, buffer)
 
-
-    client_socket.close()
     
+    client_socket.close()
+
     sys.exit() # Close Thread
 
     
