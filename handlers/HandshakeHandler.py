@@ -1,5 +1,4 @@
-import socket, json
-import sys
+import socket, json, sys
 from chatutils import utils, channel2
 from chatutils.chatio2 import ChatIO
 from lib.encryption import CipherTools
@@ -40,11 +39,13 @@ class ClientSide(ChatIO):
 
                 # 4. Receive uniqueness.
                 unique = self.recv_n_unpack(self.sock, HandshakeCmds).decode()
+
                 if not unique:
                     channel2.killit()
                     break
             except:
-                pass
+                break
+
         return nick
 
     def show_nick_request(self, prompt: str) -> str:
@@ -52,13 +53,20 @@ class ClientSide(ChatIO):
         valid_nick = False
 
         while not valid_nick:
-            nick = input(prompt)
-            valid_nick = self.is_valid(nick)
+            try:
+                nick = input(prompt)
+                valid_nick = self.is_valid(nick)
+
+            except KeyboardInterrupt:
+                print(' [x] User interruption.')    
+                self.sock.close()
+                sys.exit()
+                break
 
         return nick
 
     def is_valid(self, nick: str) -> bool:
-        if nick not in [""]:
+        if nick.isalnum():
             return True
         else:
             print(sysMsgList.getNickErr)

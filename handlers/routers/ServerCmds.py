@@ -1,5 +1,5 @@
 from chatutils import channel2
-import socket
+import socket, sys
 from chatutils import utils
 from chatutils.chatio2 import ChatIO
 from handlers import HandshakeHandler
@@ -11,10 +11,10 @@ import config.filepaths as paths
 
 configs = utils.JSONLoader()
 prefixes = utils.JSONLoader(paths.prefix_path)
+users = utils.JSONLoader(paths.user_dict_path)
 
 HEADER_LEN = configs.dict["system"]["headerLen"]
 BUFFER_LEN = configs.dict["system"]["bufferLen"]
-
 
 def _b_handler(sock: socket, buffer: dict, *args, **kwargs):
     """Boot user."""
@@ -42,8 +42,9 @@ def _b_handler(sock: socket, buffer: dict, *args, **kwargs):
                                 sysMsgList.bootMsg)
                     
                     buffer["sockets"][nick].close()
+                    # sys.exit()
                     # utils.delete_user(bootee)
-                    break
+                    return
             else:
                 continue
 
@@ -55,15 +56,30 @@ def _b_handler(sock: socket, buffer: dict, *args, **kwargs):
                         sysMsgList.bootUserNotFound)          
 
 
-def _i_handler(sock: socket, *args, **kwargs):
-    print("pinged back")
+def _i_handler(sock: socket, buffer: dict, *args, **kwargs):
+    """Clear user from user_dict if no response."""
+    
+    registered_socks = []
+
+    users.reload()
+
+    for user in users.dict.keys():
+        try:
+            registered_socks.append(buffer["sockets"][user])
+        except:
+            print(f"{user} is no longer connected. Deleting user.")
+            utils.delete_user(user)
+            users.reload()
+            continue
+
+    print("Boomin back atcha!")
 
 
 def _l_handler(sock: socket, buffer: dict, *args, **kwargs):
     """RELAY LINE BREAK"""
     bytes_data = ChatIO.unpack_data(sock)
     print(bytes_data)
-    print(buffer)
+    # print(buffer)
     ChatIO().broadcast(sock, buffer, pfx_name="newLine")
     return
 
@@ -152,8 +168,7 @@ def _K_handler(sock: socket, buffer: dict, *args, **kwargs):
 def _M_handler(sock: socket, buffer: dict, *args, **kwargs) -> bytes:
     """DEFAULT MESSAGE HANDLER."""
     msg_bytes = buffer["msg_bytes"] = ChatIO.unpack_data(sock)
-    # print(buffer)
-    print(msg_bytes)
+    print(msg_bytes.decode())
     ChatIO().broadcast(sock, buffer)
     return msg_bytes
 
