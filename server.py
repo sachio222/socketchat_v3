@@ -1,5 +1,5 @@
 from chatutils import channel2
-import socket, ssl, sys
+import socket, ssl, sys, time
 
 from threading import Thread
 from handlers import HandshakeHandler, ServMsgHandler
@@ -94,21 +94,12 @@ def handle_client(client_socket: socket, addr: tuple) -> None:
         sys.exit() # Close Thread
 
 
-def das_boot():
-
-    import time
+def pinger():
     while True:
         time.sleep(configs.dict["system"]["idleTimeSec"])
         print(time.perf_counter())
         for s in sockets_dict.values():
-            try:
-                # start = time.perf_counter()
-                s.send(b"i")
-                # stop = time.perf_counter()
-                # print(f"Ping: {stop - start}ms")
-            except:
-                # REMOVE from all dicts
-                pass
+            s.send(b"i")
 
 
 def main():
@@ -124,7 +115,7 @@ def main():
     accept_thread = Thread(target=accept_client, args=(server,))
     accept_thread.start()
 
-    idle_thread = Thread(target=das_boot, daemon=True)
+    idle_thread = Thread(target=pinger, daemon=True)
     idle_thread.start()
 
 
