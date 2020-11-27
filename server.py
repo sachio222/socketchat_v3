@@ -48,52 +48,50 @@ def accept_client(server):
 
 def handle_client(client_socket: socket, addr: tuple) -> None:
 
-    user_dict = HandshakeHandler.ServerSide(client_socket, addr).user
-    sockets_dict[user_dict["nick"]] = client_socket
+    try:
+        user_dict = HandshakeHandler.ServerSide(client_socket, addr).user
+        sockets_dict[user_dict["nick"]] = client_socket
 
-    # announcement = f"[+] {user_dict['nick']} has joined the chat."
-    announcement = ChatIO.make_buffer(
-        sockets_dict, user_dict, "sysMsg",
-        f"[+] {user_dict['nick']} has joined the chat.")
+        # announcement = f"[+] {user_dict['nick']} has joined the chat."
+        announcement = ChatIO.make_buffer(
+            sockets_dict, user_dict, "sysMsg",
+            f"[+] {user_dict['nick']} has joined the chat.")
 
-    departure = ChatIO.make_buffer(
-        sockets_dict, user_dict, "sysMsg",
-        f"[-] {user_dict['nick']} has left the chat.")
+        departure = ChatIO.make_buffer(
+            sockets_dict, user_dict, "sysMsg",
+            f"[-] {user_dict['nick']} has left the chat.")
 
-    print(f"announcement={announcement}")
-    ChatIO().broadcast(client_socket,
-                       announcement,
-                       "sysMsg",
-                       "other")
+        # print(f"announcement={announcement}")
+        ChatIO().broadcast(client_socket,
+                        announcement,
+                        "sysMsg",
+                        "other")
 
-    while True:
-        try:
-            msg_type = client_socket.recv(PREFIX_LEN)
-            # utils.debug_(msg_type, "msg_type", "handle_cient", True)
-        except:
-            msg_type = None
-
-        if not msg_type:
-            ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
-            print(f'[x] {user_dict["nick"]} has disconnected.')
-            del sockets_dict[user_dict["nick"]]
+        while True:
             try:
-                utils.delete_user(user_dict["nick"])
+                msg_type = client_socket.recv(PREFIX_LEN)
+                # utils.debug_(msg_type, "msg_type", "handle_cient", True)
             except:
-                pass
-            break
+                msg_type = None
 
-        buffer = ChatIO.make_buffer(sockets_dict, user_dict, msg_type)
-        # utils.debug_(buffer, "buffer")
+            if not msg_type:
+                ChatIO().broadcast(client_socket, departure, "sysMsg", "other")
+                print(f'[x] {user_dict["nick"]} has disconnected.')
+                del sockets_dict[user_dict["nick"]]
+                try:
+                    utils.delete_user(user_dict["nick"])
+                except:
+                    pass
+                break
 
-        ServMsgHandler.dispatch(client_socket, buffer)
+            buffer = ChatIO.make_buffer(sockets_dict, user_dict, msg_type)
+            # utils.debug_(buffer, "buffer")
 
-    
-    client_socket.close()
-
-    sys.exit() # Close Thread
-
-    
+            ServMsgHandler.dispatch(client_socket, buffer)
+    except:
+        print("[x] Connection interrputed.")
+        client_socket.close()
+        sys.exit() # Close Thread
 
 
 def das_boot():

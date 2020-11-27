@@ -1,7 +1,7 @@
 #!/usr/bin/ python3
 """Encryptochat 2.0"""
 from chatutils.argparser import ArgParser
-import socket, ssl
+import socket, ssl, sys
 from threading import Thread
 from chatutils import utils, channel2
 from chatutils.channel2 import Chime
@@ -42,7 +42,7 @@ class Client(ChatIO):
             # ******** SSL WRAPPER ********#
 
             configs.reload()
-
+            
             USER_ID = HandshakeHandler.ClientSide(sock).nick
 
             self.start_threads(sock)
