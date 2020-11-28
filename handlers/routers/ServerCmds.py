@@ -57,11 +57,11 @@ def _b_handler(sock: socket, buffer: dict, *args, **kwargs):
 
 def _i_handler(sock: socket, buffer: dict, *args, **kwargs):
     """Clear user from user_dict if no response."""
-    
+
     users = utils.JSONLoader(paths.user_dict_path)
     utils.purge_users(users, buffer)
 
-    print("Boomin back atcha!")
+    # print("Boomin back atcha!")
 
 
 def _l_handler(sock: socket, buffer: dict, *args, **kwargs):
