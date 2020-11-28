@@ -35,6 +35,10 @@ You don't need messenger. **Secure CLI Socket Chat**
 
 ```/unmute```
 
+```/encryption``` or ```/cryp``` Displays current encryption.
+
+```/encryption list``` or ```/cryp ls``` Shows available encryption methods
+
 ```/status``` Shows who's in the room at the moment. 
 
 ```ping``` IN PROGRESS. Sends a ping request to the server.
