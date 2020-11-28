@@ -139,6 +139,19 @@ def delete_user(nick: str):
     user_dict.update()
 
 
+def purge_users(users: dict, buffer: dict):
+        registered_socks = []
+        users.reload()
+        for user in users.dict.keys():
+            try:
+                registered_socks.append(buffer["sockets"][user])
+            except:
+                print(f"{user} is no longer connected. Deleting user.")
+                delete_user(user)
+                users.reload()
+                continue
+
+
 def debug_(value: any,
            name: str = "value",
            called_from: str = "None",
