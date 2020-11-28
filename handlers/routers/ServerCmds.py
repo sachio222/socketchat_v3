@@ -11,7 +11,6 @@ import config.filepaths as paths
 
 configs = utils.JSONLoader()
 prefixes = utils.JSONLoader(paths.prefix_path)
-users = utils.JSONLoader(paths.user_dict_path)
 
 HEADER_LEN = configs.dict["system"]["headerLen"]
 BUFFER_LEN = configs.dict["system"]["bufferLen"]
@@ -59,18 +58,8 @@ def _b_handler(sock: socket, buffer: dict, *args, **kwargs):
 def _i_handler(sock: socket, buffer: dict, *args, **kwargs):
     """Clear user from user_dict if no response."""
     
-    registered_socks = []
-
-    users.reload()
-
-    for user in users.dict.keys():
-        try:
-            registered_socks.append(buffer["sockets"][user])
-        except:
-            print(f"{user} is no longer connected. Deleting user.")
-            utils.delete_user(user)
-            users.reload()
-            continue
+    users = utils.JSONLoader(paths.user_dict_path)
+    utils.purge_users(users, buffer)
 
     print("Boomin back atcha!")
 

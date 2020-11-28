@@ -135,6 +135,10 @@ def mute(*args, **kwargs):
     print("@YO: Muted. Type /unmute to restore sound.")
     Chime.mute_chime()
 
+def purge(sock: socket, *args, **kwargs):
+    print("Purging user dict.")
+    sock.send(b"i")
+
 
 def trust(sock: socket, *args, **kwargs):
     """Tell server to send public keys."""
@@ -165,5 +169,6 @@ dispatch = {
     '/status': status,
     '/mute': mute,
     '/trust': trust,
-    '/unmute': unmute
+    '/unmute': unmute,
+    '/purge': purge
 }
