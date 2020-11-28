@@ -66,7 +66,7 @@ class ClientSide(ChatIO):
         return nick
 
     def is_valid(self, nick: str) -> bool:
-        if nick.isalnum():
+        if nick.isprintable() and len(nick) > 0 and not nick.isspace():
             return True
         else:
             print(sysMsgList.getNickErr)
