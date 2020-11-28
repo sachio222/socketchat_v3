@@ -27,6 +27,10 @@ You don't need messenger. **Secure CLI Socket Chat**
 
 ```/trust``` Exchange keys (Currently only works with all clients, single client trust coming soon)
 
+```/help``` Shows commands, and addons
+
+```/about```
+
 ```/mute```
 
 ```/unmute```
@@ -38,6 +42,20 @@ You don't need messenger. **Secure CLI Socket Chat**
 ```/exit``` Quits the client. 
 
 ```/sendfile``` IN PROGRESS. Sends file (currently unencrypted) to selected user.
+
+## Current Addons
+
+```/wikipedia``` Wikipedia
+
+```/maps``` Open street maps
+
+```/urband``` Urban Dictionary
+
+```/moon``` Current Phase of the moon
+
+```/weather``` Weather near you
+
+```/epic``` splices together latest Earth rotation sequence from the Earth Polychromatic Imaging Camera
 
 ## Contributors
 J. Krajewski
