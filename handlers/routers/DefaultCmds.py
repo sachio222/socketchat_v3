@@ -136,6 +136,7 @@ def mute(*args, **kwargs):
     Chime.mute_chime()
 
 def purge(sock: socket, *args, **kwargs):
+    """Sends a ping response to trigger purge of user_dict. When conflict in status."""
     print("Purging user dict.")
     sock.send(b"i")
 
@@ -160,15 +161,15 @@ dispatch = {
     '/cryp': encryption,
     '/encryption': encryption,
     '/exit': exit,
-    '/help': help,
     '/h': help,
-    'keys': keys,
+    '/hackmyserver': cli,
+    '/help': help,
+    '/keys': keys,
+    '/mute': mute,
+    '/purge': purge,
     '/sendfile': sendfile,
     '/sendkey': sendkey,
-    '/hackmyserver': cli,
     '/status': status,
-    '/mute': mute,
     '/trust': trust,
-    '/unmute': unmute,
-    '/purge': purge
+    '/unmute': unmute
 }
