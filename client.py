@@ -1,5 +1,5 @@
 #!/usr/bin/ python3
-"""Encryptochat 2.0"""
+"""Encryptochat 3.0"""
 from chatutils.argparser import ArgParser
 import socket, ssl, sys
 from threading import Thread
