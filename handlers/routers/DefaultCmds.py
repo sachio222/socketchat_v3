@@ -32,6 +32,14 @@ def boot(sock: socket, msg_parts: list, *args, **kwargs):
 
 def cli(*args, **kwargs):
     """Command line on server."""
+    if not passtools.has_password("cli"):
+        # No hash ships with the repo. Make your own, it stays in config/prv.
+        print("[!] No password set for /hackmyserver yet.")
+        if input("[?] Set one now? (y/n): ").strip().lower() in ["y", "yes"]:
+            if passtools.set_password("cli"):
+                print("[+] Run /hackmyserver again to use it.")
+        return
+
     if passtools.request_password("cli"):
         print(
             "[+] Alert: Don't use vim or nano, it'll lock both server and client."

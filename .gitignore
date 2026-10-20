@@ -29,6 +29,7 @@ venv
 #-- private keys
 /**/*.key
 *.pem
+/config/prv/
 
 
 #-- conf files
