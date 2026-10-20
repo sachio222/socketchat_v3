@@ -22,24 +22,28 @@ class ChatIO:
     def pack_n_send(self, sock: socket, typ_pfx: str, data: str) -> None:
         """Convenience function, packs data and sends data."""
         outgoing_data = self.pack_data(typ_pfx, data)
-        sock.send(outgoing_data)
+        sock.sendall(outgoing_data)
 
     def pack_data(self, typ_pfx: str, data: str) -> bytes:
         """
         Example packet:
         """
-        try:
-            data = data.decode()
-        except:
-            pass
+        # Header counts bytes, not characters. "é" is 2 bytes on the wire.
+        if isinstance(data, str):
+            data = data.encode()
+        elif not isinstance(data, bytes):
+            data = str(data).encode()
+
+        if isinstance(typ_pfx, bytes):
+            typ_pfx = typ_pfx.decode()
 
         size = len(data)
 
         utils.debug_(size, "size", "pack_n_send")
         header = self._make_header(size)
 
-        packed_data = f"{typ_pfx}{header}{data}"
-        return packed_data.encode()
+        packed_data = f"{typ_pfx}{header}".encode() + data
+        return packed_data
 
     def _make_header(self, size: int, header_len: int = HEADER_LEN):
         header = f'{size:<{header_len}}'
@@ -90,14 +94,25 @@ class ChatIO:
     @classmethod
     def unpack_data(cls, sock: socket) -> bytes:
         """RETURNS MSG"""
-        msg_len = sock.recv(HEADER_LEN)
+        msg_len = cls.recv_exactly(sock, HEADER_LEN)
         try:
-            msg_bytes = sock.recv(int(msg_len))
+            msg_bytes = cls.recv_exactly(sock, int(msg_len))
         except:
             msg_bytes = ""
 
         # msg = msg.rstrip()
         return msg_bytes
+
+    @staticmethod
+    def recv_exactly(sock: socket, size: int) -> bytes:
+        """recv can hand back less than you asked for. Keep going till it's all here."""
+        data = b""
+        while len(data) < size:
+            chunk = sock.recv(size - len(data))
+            if not chunk:
+                break  # Other side hung up.
+            data += chunk
+        return data
 
     @staticmethod
     def make_buffer(sockets_dict: dict,
