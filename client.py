@@ -97,23 +97,29 @@ class Client(ChatIO):
         sending_thread.start()
 
 
-def main():
-    client = Client()
-    client.connect()
-
-
-if __name__ == "__main__":
+def make_ssl_context() -> ssl.SSLContext:
     # ******** SSL CONTEXT ********#
-    x509.X509()
     rsa_key_path = paths.x509_path + 'rsa_key.pem'
     cert_path = paths.x509_path + 'certificate.pem'
 
-    client_ctxt = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    # SERVER_AUTH makes a client context. CLIENT_AUTH is for servers now.
+    client_ctxt = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
     client_ctxt.check_hostname = False
     client_ctxt.verify_mode = ssl.CERT_NONE
     client_ctxt.set_ciphers('ECDHE-ECDSA-AES256-SHA384')
     client_ctxt.options |= ssl.OP_NO_COMPRESSION
     client_ctxt.load_verify_locations(cert_path)
     # ******** SSL CONTEXT ********#
+    return client_ctxt
+
+
+def main():
+    client = Client()
+    client.connect()
+
+
+if __name__ == "__main__":
+    x509.X509()
+    client_ctxt = make_ssl_context()
 
     main()

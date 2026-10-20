@@ -33,7 +33,14 @@ def accept_client(server):
         client_socket, addr = server.accept()
 
         # ******** SSL WRAPPER ******** #
-        client_socket = server_ctxt.wrap_socket(client_socket, server_side=True)
+        try:
+            client_socket = server_ctxt.wrap_socket(client_socket,
+                                                    server_side=True)
+        except (ssl.SSLError, OSError) as e:
+            # One bad handshake shouldn't take the whole server down.
+            print(f"[x] TLS handshake failed with {addr}: {e}")
+            client_socket.close()
+            continue
         # ******** SSL WRAPPER ******** #
 
         active_sockets.append(client_socket)
@@ -103,6 +110,23 @@ def pinger():
             s.send(b"i")
 
 
+def make_ssl_context() -> ssl.SSLContext:
+    # ******** SSL CONTEXT ******** #
+    rsa_key_path = paths.x509_path + 'rsa_key.pem'
+    cert_path = paths.x509_path + 'certificate.pem'
+
+    server_ctxt = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    server_ctxt.verify_mode = ssl.CERT_NONE
+    server_ctxt.set_ecdh_curve('prime256v1')
+    server_ctxt.set_ciphers('ECDHE-ECDSA-AES256-GCM-SHA384')
+    server_ctxt.options |= ssl.OP_NO_COMPRESSION
+    server_ctxt.options |= ssl.OP_SINGLE_ECDH_USE
+    server_ctxt.options |= ssl.OP_CIPHER_SERVER_PREFERENCE
+    server_ctxt.load_cert_chain(cert_path, rsa_key_path)
+    # ******** SSL CONTEXT ******** #
+    return server_ctxt
+
+
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="Encryptochat server.")
     parser.add_argument("--allow-remote-shell",
@@ -137,19 +161,7 @@ if __name__ == "__main__":
     if args.allow_remote_shell:
         print(sysMsgList.remoteShellOn)
 
-    # ******** SSL CONTEXT ******** #
     x509.X509()
-    rsa_key_path = paths.x509_path + 'rsa_key.pem'
-    cert_path = paths.x509_path + 'certificate.pem'
-
-    server_ctxt = ssl.SSLContext(ssl.PROTOCOL_TLS)
-    server_ctxt.verify_mode = ssl.CERT_NONE
-    server_ctxt.set_ecdh_curve('prime256v1')
-    server_ctxt.set_ciphers('ECDHE-ECDSA-AES256-GCM-SHA384')
-    server_ctxt.options |= ssl.OP_NO_COMPRESSION
-    server_ctxt.options |= ssl.OP_SINGLE_ECDH_USE
-    server_ctxt.options |= ssl.OP_CIPHER_SERVER_PREFERENCE
-    server_ctxt.load_cert_chain(cert_path, rsa_key_path)
-    # ******** SSL CONTEXT ******** #
+    server_ctxt = make_ssl_context()
 
     main()
