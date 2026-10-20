@@ -1,26 +1,24 @@
-#### secure-cli-socketchat-python-v1
-# Secure CLI Socket Chat (BETA)
-### Street name: Encryptochat / Cryptochat
-======
+# socketchat v3
 
-You don't need messenger. **Secure CLI Socket Chat** 
+A chat you run from the terminal. One person starts a small server, friends connect from their own machines, and messages can be encrypted with ChaCha20-Poly1305, a modern cipher that also catches tampering.
 
-## Features:
-* Secure, client-side, end to end encryption/decryption
-* Uses Diffie Hellman Key Exchange with pynacl.
-* Supports XChaCha20-poly1305, aes256, Fernet (aes128) message encryption.
-* Use it on your own LAN to chat between computers, or across the world with friends.
-* Direct message or multiple chat-client connections.
-* Secure chat: Encrypt your traffic using assymetric key encryption.
-* Tiny filesize and runs in terminal.
-* Monitor unencrypted chats on your server.
-* Supports Addons and features added continually.
+v3 is a rewrite of [socketchat v2](https://github.com/sachio222/socketchat_v2) from 2020: same idea, cleaner design and stronger encryption. It is still a learning project, so don't use it for anything you need to keep secret. "Before you rely on it" below lists where it falls short.
 
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=diamondhawk&url=https://github.com/sachio222/socketchat_v1)
+## New since v2
+
+- **Encryption that catches tampering.** v2 used AES-256 in CBC mode with no tamper check. v3 adds ChaCha20-Poly1305, which rejects any message changed on the way.
+- **Pick your cipher while you chat.** `/cryp chacha` switches ciphers, and `/cryp ls` lists the options.
+- **A cleaner design.** v2 handles every message in one long chain of checks in `client.py`. In v3, each message type goes to its own handler module in `handlers/routers/`, so adding a command means adding a handler.
+- **A config file.** Host, port and cipher live in `config/config.json`, which the first run creates from `config/configDefaults.json`.
+- **Room tools.** `/boot <name>` removes someone from the room. `/hackmyserver` opens a shell on the server, off unless the server starts with `--allow-remote-shell`. Its local password is stored as an Argon2 hash, the current standard for storing passwords.
+- **Accented letters work.** Message lengths count bytes, so "über" and emoji go through cleanly. v2 can break on them.
+- **A sturdier server.** One bad connection no longer stops the server from accepting new people.
+
+v2 still has two things v3 hasn't caught up on: `/trust` with one person rather than the whole room, and a complete `/sendfile` flow (unencrypted in v2).
 
 ## Install
 
-Needs Python 3.10 or newer. Tested on Python 3.14 on macOS.
+You need Python 3.10 or newer. It was last tested on Python 3.14 on macOS.
 
 ```
 git clone https://github.com/sachio222/socketchat_v3.git
@@ -30,7 +28,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Usage
+## Run it
 
 ### Start the server
 
@@ -38,119 +36,73 @@ pip install -r requirements.txt
 python server.py
 ```
 
-The server listens on 127.0.0.1, port 12222. To chat across your LAN or the internet, change `defaultHost` and `defaultPort` in `config/configDefaults.json` before the first run, or in `config/config.json` after it. The first run copies the defaults into `config/config.json`.
+The server listens on your own machine (127.0.0.1) at port 12222. To chat across your network or the internet, change `defaultHost` and `defaultPort` in `config/configDefaults.json` before the first run, or in `config/config.json` after it.
 
 ### Start two clients
 
-Each client keeps its config and keys in its own folder, so run each one from its own clone. To try it on one machine, clone the repo a second time and set up a venv there too. Then in each folder run:
+Each client keeps its config and keys in its own folder, so run each one from its own clone. To try it on one machine, clone the repo a second time and set up a venv there too. Then in each folder:
 
 ```
 python client.py
 ```
 
-Pick a name when asked. Type a message and press enter to send it.
+Pick a name when asked, type a message and press Enter.
 
-### Encrypted chat
+## Encrypted chat
 
 1. Both clients connect.
-2. One client types `/trust`. The two clients swap public keys, then the symmetric keys travel inside an encrypted NaCl box. The other client prints `Symmetric keys unpacked.`
-3. Pick a cipher, for example `/cryp chacha`. Messages from that client are now encrypted with XChaCha20-Poly1305, and the server only sees ciphertext.
+2. One client types `/trust`. The clients swap public keys, and the message keys travel inside a sealed NaCl box. The other client prints "Symmetric keys unpacked."
+3. Type `/cryp chacha`. Your messages are now encrypted with ChaCha20-Poly1305, and the server sees only scrambled text.
 
-`/cryp ls` lists the ciphers. `goober` means no encryption.
+`chacha` is the cipher tested end to end. `/cryp ls` also lists older options that are unfinished or untested, and `goober` turns encryption off.
 
-### Remote shell is off
+## Before you rely on it
 
-`/hackmyserver` lets a client run shell commands on the server. The server refuses those commands unless you start it with:
+- **The server hands out public keys, and nothing checks them.** A dishonest server could swap in its own key and read everything.
+- **Clients don't verify the server's certificate.** The client loads it but accepts any server.
+- **`/trust` covers the whole room,** not one person.
+- **The name says XChaCha20, the code runs ChaCha20.** The module is named `XChaCha20Poly1305.py`, but it uses ChaCha20-Poly1305 with a 12-byte nonce. It's still an authenticated cipher.
+- **The server sees who talks to whom.** Names travel in the clear.
+- **Files and ping are unfinished.** `/sendfile` and `ping` are still in progress.
+- **The remote shell is dangerous when on.** With `--allow-remote-shell`, anyone who can connect can run commands on the server machine. Only use it on a network you trust.
 
-```
-python server.py --allow-remote-shell
-```
+## Commands
 
-With that flag on, anyone who can connect can run commands on the server machine, so only use it on a network you trust. The client also asks you to set a local password the first time you use `/hackmyserver`. It is stored as a hash in `config/prv/keys/hashes.json`, which git ignores.
+| Command | What it does |
+|---|---|
+| `/help` | Lists commands and add-ons. |
+| `/trust` | Swaps keys with everyone in the room. |
+| `/cryp <cipher>` or `/encryption <cipher>` | Switches cipher. `/cryp ls` lists them. |
+| `/status` | Shows who's online. |
+| `/boot <name>` | Removes someone from the room. |
+| `/hackmyserver` | Shell on the server, off unless the server runs with `--allow-remote-shell`. |
+| `/mute`, `/unmute` | Turns chat sounds off and on. |
+| `/about` | About socketchat. |
+| `/exit` | Quits the client. |
 
-### Math facts
-
-`/mathfacts` calls the Numbers API on RapidAPI. Get a key at rapidapi.com and set it before you start the client:
+Add-ons: `/weather <place>`, `/moon`, `/map <place>`, `/wikipedia <term>` (or `/wp`), `/urband <term>`, `/mathfacts <number>` and `/epic`, which stitches together NASA's latest images of the Earth turning. `/mathfacts` needs a free key from rapidapi.com:
 
 ```
 export RAPIDAPI_KEY=your-key-here
 ```
 
-### Tests
+## Tests
 
 ```
 pip install pytest
 python -m pytest tests
 ```
 
-## Commands
-
-```/trust``` Exchange keys (Currently only works with all clients, single client trust coming soon)
-
-```/help``` Shows commands, and addons
-
-```/about```
-
-```/mute```
-
-```/unmute```
-
-```/encryption``` or ```/cryp``` Displays current encryption.
-
-```/encryption list``` or ```/cryp ls``` Shows available encryption methods
-
-```/status``` Shows who's in the room at the moment. 
-
-```/boot <name>``` Kicks a user from the room.
-
-```/hackmyserver``` Shell on the server. Off unless the server runs with ```--allow-remote-shell```.
-
-```ping``` IN PROGRESS. Sends a ping request to the server.
-
-```/exit``` Quits the client. 
-
-```/sendfile``` IN PROGRESS. Sends file (currently unencrypted) to selected user.
-
-## Current Addons
-
-```/wikipedia``` or ```/wp``` Wikipedia
-
-```/map``` Open street maps
-
-```/urband``` Urban Dictionary
-
-```/moon``` Current Phase of the moon
-
-```/weather``` Weather near you
-
-```/mathfacts``` Trivia about a number. Needs ```RAPIDAPI_KEY```.
-
-```/epic``` splices together latest Earth rotation sequence from the Earth Polychromatic Imaging Camera
-
-## Contributors
-J. Krajewski
-M. Holcombe
-
-
-## License 
-* see [LICENSE](https://github.com/username/sw-name/blob/master/LICENSE.md) file
-
-## Version 
-* Version 1.1
-
 ## Troubleshooting
-Currently tested on MacOSX and Linux. 
 
-Error:
-```socket.gaierror: [Errno 8] nodename nor servname provided, or not known```
+On a Mac, `socket.gaierror: [Errno 8] nodename nor servname provided, or not known` usually clears if you turn Sharing on and off again in System Settings ([details](https://stackoverflow.com/a/53382881/5369711)).
 
-System: Mac
+## Credits
 
-Solution: [Enable Sharing Permissions, then Disable](https://stackoverflow.com/a/53382881/5369711)
+Jake Krajewski and M. Holcombe.
 
-## Contact
-#### Developer/Company
+Built on [PyNaCl](https://pynacl.readthedocs.io/), [pycryptodome](https://www.pycryptodome.org/), [cryptography](https://pypi.org/project/cryptography/) and [argon2-cffi](https://argon2-cffi.readthedocs.io/).
 
-* Twitter: [@jakekrajewski](https://twitter.com/jakekrajewski "@jakekrajewski")
-* Medium: [@Jakekrajewski](https://medium.com/@Jakekrajewski)
+## License
 
+MIT. See [LICENSE.md](LICENSE.md).
