@@ -9,8 +9,18 @@ noobs out. TODO: create remote pass repo for actual security.
 hash_json = utils.JSONLoader(paths.hashes)
 
 
+def has_password(which_hash: str) -> bool:
+    try:
+        hash_json.reload()
+    except:
+        pass
+    return bool(hash_json.dict.get(which_hash))
+
+
 def password_verify(which_hash: str, password: str) -> bool:
-    hash = hash_json.dict[which_hash]
+    hash = hash_json.dict.get(which_hash)
+    if not hash:
+        return False
     ph = argon2.PasswordHasher(time_cost=16,
                                memory_cost=2**15,
                                parallelism=2,
@@ -43,7 +53,7 @@ def set_password(which_hash):
 
     if new_pw == new_pw2:
         hash = ph.hash(new_pw)
-        setattr(hash_json, which_hash, hash)
+        hash_json.dict[which_hash] = hash
         hash_json.update()
         print("[+] Password updated!")
     else:

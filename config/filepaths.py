@@ -1,6 +1,7 @@
 default_json = "config/defaultJson.json"
 json_path = "config/config.json"
 config_path = "config/config.json"
+config_defaults = "config/configDefaults.json"
 user_dict_path = "config/userDict.json"
 prefix_path = "config/prefixList.json"
 about = "config/pub/about.txt"

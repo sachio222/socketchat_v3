@@ -81,8 +81,18 @@ class JSONLoader():
             self.dict = self.load()
         except:
             # print(f"WARNING: {e}")
-            self.dict = {}
-            self.dict = self.update()
+            # Fresh clone: config.json is gitignored, so start from defaults.
+            self.dict = self.defaults()
+            self.update()
+
+    def defaults(self) -> dict:
+        if os.path.normpath(self.path) != os.path.normpath(paths.config_path):
+            return {}
+        try:
+            with open(paths.config_defaults) as f:
+                return json.load(f)
+        except:
+            return {}
 
     def load(self):
         with open(self.path) as f:
@@ -93,14 +103,22 @@ class JSONLoader():
         self.dict = self.load()
 
     def update(self):
+        self._make_folder()
         with open(self.path, "w") as f:
             json.dump(self.dict, f, indent=4)
         self.reload()
 
     def clear(self):
         self.dict = {}
+        self._make_folder()
         with open(self.path, "w") as f:
             json.dump(self.dict, f)
+
+    def _make_folder(self):
+        # Key folders like config/prv/keys/ aren't in the repo. Make on demand.
+        folder = os.path.dirname(self.path)
+        if folder:
+            os.makedirs(folder, exist_ok=True)
 
 
 def store_user(sock: socket,
