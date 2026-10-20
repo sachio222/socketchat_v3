@@ -1,8 +1,9 @@
 from chatutils import channel2
-import socket, ssl, sys, time
+import argparse, socket, ssl, sys, time
 
 from threading import Thread
 from handlers import HandshakeHandler, ServMsgHandler
+from handlers.routers import ServerCmds
 from lib.encryption import x509
 
 from chatutils import utils
@@ -102,6 +103,16 @@ def pinger():
             s.send(b"i")
 
 
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(description="Encryptochat server.")
+    parser.add_argument("--allow-remote-shell",
+                        action="store_true",
+                        help="Let clients run shell commands on this machine "
+                        "with /hackmyserver. Off by default. Only use it on "
+                        "a network you trust.")
+    return parser.parse_args(argv)
+
+
 def main():
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -120,6 +131,11 @@ def main():
 
 
 if __name__ == "__main__":
+
+    args = parse_args()
+    ServerCmds.allow_remote_shell = args.allow_remote_shell
+    if args.allow_remote_shell:
+        print(sysMsgList.remoteShellOn)
 
     # ******** SSL CONTEXT ******** #
     x509.X509()

@@ -15,6 +15,10 @@ prefixes = utils.JSONLoader(paths.prefix_path)
 HEADER_LEN = configs.dict["system"]["headerLen"]
 BUFFER_LEN = configs.dict["system"]["bufferLen"]
 
+# Remote shell stays off unless server.py starts with --allow-remote-shell.
+# The /hackmyserver password only lives on the client, so it can't guard this.
+allow_remote_shell = False
+
 def _b_handler(sock: socket, buffer: dict, *args, **kwargs):
     """Boot user."""
     bootee = ChatIO.unpack_data(sock).decode()
@@ -122,6 +126,13 @@ def _s_handler(sock: socket, buffer: dict, *args, **kwargs):
 
 def _C_handler(sock: socket, *args, **kwargs):
     """COMMAND LINE CONTROL."""
+    if not allow_remote_shell:
+        # Eat the command so the stream stays in sync, then say no.
+        refused = ChatIO.unpack_data(sock)
+        print(f"[!] Refused remote shell command: {refused!r}")
+        ChatIO().pack_n_send(sock, prefixes.dict["server"]["chat"]["sysMsg"],
+                             sysMsgList.remoteShellOff)
+        return
     cmd.commands(sock)
 
 
